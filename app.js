@@ -19,6 +19,7 @@ let chartInstance = null;
 document.addEventListener("DOMContentLoaded", () => {
   initAppState();
   setupEventListeners();
+  setupImportExcel();
   renderApp();
 });
 
@@ -1145,7 +1146,132 @@ function removeSharedUser(email) {
   }
 }
 
-// 11. Helpers de Formatação e Utilitários
+// 11. Importação de Excel (SheetJS)
+function setupImportExcel() {
+  const btn = document.getElementById("btnImportExcel");
+  const input = document.getElementById("excelFileInput");
+  if (!btn || !input) return;
+
+  btn.addEventListener("click", () => input.click());
+  input.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        processExcelImport(evt.target.result);
+      } catch (err) {
+        alert("Erro ao ler o arquivo Excel: " + err.message);
+      }
+      input.value = "";
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+function processExcelImport(buffer) {
+  const wb = XLSX.read(buffer, { type: "array", cellDates: true });
+
+  const imported = {
+    leadsIndicated: importLeadsFromExcel(wb),
+    leadsPrime: importPrimeFromExcel(wb),
+    relationships: importRelationshipsFromExcel(wb),
+  };
+
+  const totalLeads = imported.leadsIndicated.length;
+  const totalPrime = imported.leadsPrime.length;
+  const totalRel = imported.relationships.length;
+
+  if (totalLeads === 0 && totalPrime === 0 && totalRel === 0) {
+    alert("Nenhum dado encontrado nas abas esperadas da planilha.");
+    return;
+  }
+
+  if (!confirm(`Importar dados do Excel?\n\n• ${totalLeads} registros de leads\n• ${totalPrime} leads PRIME\n• ${totalRel} parceiros (relacionamentos)\n\nOs dados existentes serão substituídos.`)) return;
+
+  if (imported.leadsIndicated.length > 0) state.leadsIndicated = imported.leadsIndicated;
+  if (imported.leadsPrime.length > 0) state.leadsPrime = imported.leadsPrime;
+  if (imported.relationships.length > 0) state.relationships = imported.relationships;
+
+  markLastUpdate();
+  renderApp();
+  alert("Importação concluída com sucesso!");
+}
+
+function sheetToRows(wb, sheetName) {
+  const ws = wb.Sheets[sheetName];
+  if (!ws) return [];
+  return XLSX.utils.sheet_to_json(ws, { defval: "" });
+}
+
+function importLeadsFromExcel(wb) {
+  // Tenta ler de "Planilha2" que tem Ano, Mês, Parceiro, Qde
+  const rows = sheetToRows(wb, "Planilha2");
+  const leads = [];
+  const monthMap = { Janeiro:1, Fevereiro:2, Março:3, Abril:4, Maio:5, Junho:6, Julho:7, Agosto:8, Setembro:9, Outubro:10, Novembro:11, Dezembro:12 };
+
+  rows.forEach((row, i) => {
+    const ano = row["Ano"] || row["ano"];
+    const mes = row["Mês"] || row["Mes"] || row["mês"];
+    const parceiro = row["Parceiro"] || row["parceiro"] || row["PARCEIRO"];
+    const qde = parseInt(row["Qde"] || row["QDE"] || row["qde"] || 0, 10);
+
+    if (!ano || !mes || !parceiro || isNaN(qde) || qde <= 0) return;
+    if (typeof ano !== "number") return;
+
+    const mesNum = monthMap[mes] || parseInt(mes, 10);
+    if (!mesNum) return;
+
+    const dateStr = `${ano}-${String(mesNum).padStart(2, "0")}-01`;
+    leads.push({ id: "xl_lead_" + i, date: dateStr, partner: String(parceiro).trim(), quantity: qde });
+  });
+
+  return leads;
+}
+
+function importPrimeFromExcel(wb) {
+  // Aba "Lista Parceiros e canais": NOME, PRIME (=1 significa PRIME)
+  const rows = sheetToRows(wb, "Lista Parceiros e canais");
+  const prime = [];
+
+  rows.forEach((row, i) => {
+    const nome = row["NOME"] || row["Nome"] || row["nome"];
+    const isPrime = row["PRIME"];
+    if (!nome || !isPrime || isPrime === "") return;
+
+    prime.push({
+      id: "xl_prime_" + i,
+      company: String(nome).trim(),
+      status: "Importado da planilha de parceiros.",
+      nextStep: "Verificar e atualizar status manualmente."
+    });
+  });
+
+  return prime;
+}
+
+function importRelationshipsFromExcel(wb) {
+  // Aba "Lista Parceiros e canais": todos os parceiros ativos
+  const rows = sheetToRows(wb, "Lista Parceiros e canais");
+  const rels = [];
+
+  rows.forEach((row, i) => {
+    const nome = row["NOME"] || row["Nome"] || row["nome"];
+    if (!nome || String(nome).trim() === "") return;
+
+    const tipo = row["Parceiro"] ? "Parceiro" : row["Canal"] ? "Canal" : row["Indicador"] ? "Indicador" : "Parceiro";
+    rels.push({
+      id: "xl_rel_" + i,
+      partner: String(nome).trim(),
+      subject: `Tipo: ${tipo}`,
+      lastUpdate: new Date().toISOString().split("T")[0]
+    });
+  });
+
+  return rels;
+}
+
+// 12. Helpers de Formatação e Utilitários
 function formatDateTime(date) {
   const pad = (num) => String(num).padStart(2, "0");
   return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;

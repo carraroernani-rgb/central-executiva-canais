@@ -13,6 +13,8 @@
   
   <!-- Chart.js para Gráficos Interativos -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- SheetJS para leitura de arquivos Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -87,6 +89,12 @@
             </select>
           </div>
           
+          <!-- IMPORTAR EXCEL -->
+          <input type="file" id="excelFileInput" accept=".xlsx,.xls" style="display:none">
+          <button class="btn btn-primary" id="btnImportExcel" title="Importar dados do Excel" style="display:flex;align-items:center;gap:6px;padding:8px 14px;font-size:0.85rem;">
+            <i class="fas fa-file-excel"></i> Importar Excel
+          </button>
+
           <!-- ALTERNAR TEMA -->
           <button class="theme-toggle" id="themeToggleBtn" title="Alternar Tema Escuro/Claro">
             <i class="fas fa-sun"></i>
