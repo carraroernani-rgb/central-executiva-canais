@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Ganhos — Programa de Parcerias</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #04090f;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #f0f4ff;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 780px;
+    }
+
+    :root {
+      --navy: #07112a;
+      --navy2: #0d1e3d;
+      --navy3: #162848;
+      --orange: #e85d20;
+      --orange2: #f47a45;
+      --glass: rgba(255,255,255,0.06);
+      --glass-b: rgba(255,255,255,0.10);
+      --text: #f0f4ff;
+      --muted: rgba(240,244,255,0.5);
+      --muted2: rgba(240,244,255,0.22);
+    }
+
+    .wrap {
+      background: var(--navy);
+      border-radius: 16px;
+      padding-bottom: 2rem;
+    }
+
+    /* HEADER */
+    .page-header {
+      background: var(--navy2);
+      border-radius: 16px 16px 0 0;
+      padding: 1.75rem 1.75rem 1.5rem;
+      border-bottom: 1px solid var(--glass-b);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 220px; height: 220px;
+      background: radial-gradient(circle, rgba(232,93,32,0.13) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-header h1 { font-size: 22px; font-weight: 500; color: #fff; margin-bottom: 4px; }
+    .page-header p { font-size: 14px; color: var(--muted); }
+    .brand-tag {
+      font-size: 11px; color: var(--orange);
+      text-transform: uppercase; letter-spacing: .08em;
+      font-weight: 500; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .odot { width: 7px; height: 7px; background: var(--orange); border-radius: 50%; display: inline-block; }
+
+    /* LAYOUT */
+    .section { padding: 1.4rem 1.75rem 0; }
+    .sec-label { font-size: 11px; font-weight: 500; color: var(--orange); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 3px; }
+    .sec-title { font-size: 16px; font-weight: 500; color: #fff; margin-bottom: 1rem; }
+    .divider { border: none; border-top: 1px solid var(--glass-b); margin: 1.4rem 1.75rem 0; }
+
+    /* INPUTS */
+    .inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .ig label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .ig .hint { font-size: 10px; color: var(--orange2); display: block; margin-top: 3px; }
+    .dark-input {
+      width: 100%;
+      background: var(--glass);
+      border: 1px solid var(--glass-b);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      outline: none;
+      transition: border-color .15s;
+      font-family: inherit;
+    }
+    .dark-input:focus { border-color: var(--orange); }
+
+    /* LEVEL CARDS */
+    .level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .lcard {
+      background: var(--glass);
+      border: 1px solid var(--glass-b);
+      border-radius: 12px;
+      padding: 14px 10px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      position: relative;
+    }
+    .lcard:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.09); }
+    .lcard.active { border: 2px solid var(--orange); background: rgba(232,93,32,0.10); }
+    .lcheck {
+      position: absolute; top: 8px; right: 8px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--orange); display: none;
+      align-items: center; justify-content: center;
+    }
+    .lcard.active .lcheck { display: flex; }
+    .lcard-name { font-size: 10px; font-weight: 500; color: var(--muted); margin-bottom: 6px; }
+    .lcard.active .lcard-name { color: var(--orange2); }
+    .lcard-p1 { font-size: 22px; font-weight: 500; color: #fff; }
+    .lcard-s1 { font-size: 10px; color: var(--muted); }
+    .lcard-p2 { font-size: 15px; font-weight: 500; color: var(--orange2); margin-top: 6px; }
+    .lcard-s2 { font-size: 10px; color: var(--muted); }
+
+    /* KPI STRIP */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      background: var(--navy3);
+      border-radius: 12px;
+      margin-top: 14px;
+      border: 1px solid var(--glass-b);
+      overflow: hidden;
+    }
+    .kpi-item { padding: 14px 16px; border-right: 1px solid var(--glass-b); }
+    .kpi-item:last-child { border-right: none; }
+    .kpi-lbl { font-size: 11px; color: var(--muted); margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
+    .kpi-val { font-size: 20px; font-weight: 500; color: #fff; }
+    .kpi-val.acc { color: var(--orange2); }
+    .kpi-note { font-size: 10px; color: var(--muted2); margin-top: 2px; }
+
+    /* RESULTADO */
+    .results-hero { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .rcard {
+      background: var(--glass);
+      border: 1px solid var(--glass-b);
+      border-radius: 12px;
+      padding: 18px 14px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .rcard::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--orange);
+      border-radius: 12px 12px 0 0;
+    }
+    .rcard.main { background: rgba(232,93,32,0.10); border-color: rgba(232,93,32,0.35); }
+    .rcard.main::before { background: var(--orange2); }
+    .rcard-icon { font-size: 20px; margin-bottom: 8px; }
+    .rcard-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+    .rcard-val { font-size: 24px; font-weight: 500; color: #fff; }
+    .rcard.main .rcard-val { font-size: 26px; color: var(--orange2); }
+    .rcard-tag { display: inline-block; font-size: 9px; padding: 2px 7px; border-radius: 20px; margin-top: 6px; }
+    .tag-once { background: rgba(255,255,255,0.08); color: var(--muted); }
+    .tag-rec { background: rgba(100,210,130,0.12); color: #7de0a0; }
+
+    /* PROJEÇÃO SLIDER */
+    .proj-block {
+      background: var(--navy3);
+      border: 1px solid var(--glass-b);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+    }
+    .proj-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
+    .proj-top-label { font-size: 13px; color: var(--muted); }
+    .proj-months-badge {
+      background: rgba(232,93,32,0.15);
+      border: 1px solid rgba(232,93,32,0.3);
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 13px; font-weight: 500; color: var(--orange2);
+    }
+    .proj-val-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 1.1rem; }
+    .proj-val-big { font-size: 36px; font-weight: 500; color: #fff; line-height: 1; transition: color .2s; }
+    .proj-val-sub { font-size: 12px; color: var(--muted); }
+
+    input[type=range].proj-range {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 6px;
+      background: var(--glass-b);
+      border-radius: 3px; outline: none; cursor: pointer;
+    }
+    input[type=range].proj-range::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--orange); border: 3px solid #fff; cursor: pointer;
+      box-shadow: 0 0 0 4px rgba(232,93,32,0.2);
+    }
+    input[type=range].proj-range::-moz-range-thumb {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--orange); border: 3px solid #fff; cursor: pointer;
+    }
+    .proj-track-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted2); margin-top: 6px; }
+    .proj-breakdown { display: flex; gap: 10px; margin-top: 1rem; }
+    .pb-item { flex: 1; background: var(--glass); border: 1px solid var(--glass-b); border-radius: 8px; padding: 10px 12px; }
+    .pb-lbl { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+    .pb-val { font-size: 14px; font-weight: 500; }
+    .pb-val.once { color: var(--orange2); }
+    .pb-val.rec { color: #7de0a0; }
+
+    /* TABELA */
+    .comp-table { width: 100%; border-collapse: collapse; }
+    .comp-table th { font-size: 11px; color: var(--muted); font-weight: 500; text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--glass-b); }
+    .comp-table td { font-size: 13px; color: var(--text); padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .comp-table tr.active-row td { background: rgba(232,93,32,0.08); }
+    .comp-table tr.active-row td:first-child { border-left: 2px solid var(--orange); }
+    .lvl-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 500; }
+    .b-elite    { background: rgba(232,93,32,0.2);  color: #f47a45; }
+    .b-premier  { background: rgba(244,122,69,0.2); color: #f9a97e; }
+    .b-sel      { background: rgba(26,58,110,0.5);  color: #7ba8e8; }
+    .b-parc     { background: rgba(255,255,255,0.08); color: rgba(240,244,255,0.5); }
+
+    /* EVOLUÇÃO */
+    .evo-card { background: rgba(232,93,32,0.08); border: 1px solid rgba(232,93,32,0.25); border-radius: 12px; padding: 1.25rem 1.5rem; }
+    .evo-head { font-size: 14px; font-weight: 500; color: #fff; margin-bottom: 10px; }
+    .evo-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+    .evo-row { display: flex; gap: 12px; margin-bottom: 12px; }
+    .evo-item { background: var(--glass); border: 1px solid var(--glass-b); border-radius: 8px; padding: 10px 14px; flex: 1; }
+    .evo-item-lbl { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+    .evo-item-val { font-size: 16px; font-weight: 500; color: var(--orange2); }
+    .evo-gain { background: rgba(100,200,120,0.1); border: 1px solid rgba(100,200,120,0.25); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; }
+    .evo-gain-lbl { font-size: 11px; color: rgba(100,220,130,0.7); margin-bottom: 2px; }
+    .evo-gain-val { font-size: 18px; font-weight: 500; color: #6edd8a; }
+    .evo-btn {
+      width: 100%;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .15s;
+    }
+    .evo-btn:hover { background: var(--orange2); }
+
+    @media (max-width: 600px) {
+      .level-grid { grid-template-columns: repeat(2, 1fr); }
+      .results-hero { grid-template-columns: 1fr; }
+      .inputs-grid { grid-template-columns: 1fr; }
+      .kpi-strip { grid-template-columns: 1fr; }
+      .kpi-item { border-right: none; border-bottom: 1px solid var(--glass-b); }
+      .kpi-item:last-child { border-bottom: none; }
+      .evo-row { flex-direction: column; }
+      .proj-breakdown { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+<div class="wrap">
+
+  <div class="page-header">
+    <p class="brand-tag"><span class="odot"></span>Programa de Parcerias</p>
+    <h1>Calculadora de Ganhos</h1>
+    <p>Simule sua comissão de venda e sua receita recorrente.</p>
+  </div>
+
+  <!-- S1 -->
+  <div class="section">
+    <p class="sec-label">Seção 1</p>
+    <p class="sec-title">Quanto vale esta oportunidade?</p>
+    <div class="inputs-grid">
+      <div class="ig">
+        <label>Valor da Implantação (R$)
+          <span class="hint">Ticket médio implantação: R$ 28.000</span>
+        </label>
+        <input class="dark-input" type="number" id="impl" value="28000" min="0" step="1000" oninput="calc()">
+      </div>
+      <div class="ig">
+        <label>Mensalidade (R$)
+          <span class="hint">Ticket médio mensalidade: R$ 4.800</span>
+        </label>
+        <input class="dark-input" type="number" id="mens" value="4800" min="0" step="100" oninput="calc()">
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- S2 -->
+  <div class="section">
+    <p class="sec-label">Seção 2</p>
+    <p class="sec-title">Qual seu nível de parceria?</p>
+    <div class="level-grid">
+      <div class="lcard" data-level="parceiro" onclick="selectLevel(this)">
+        <div class="lcheck"><i class="ti ti-check" style="font-size:10px;color:#fff;"></i></div>
+        <div class="lcard-name">Parceiro Elite</div>
+        <div class="lcard-p1">10%</div><div class="lcard-s1">sobre venda</div>
+        <div class="lcard-p2">—</div><div class="lcard-s2">sem recorrência</div>
+      </div>
+      <div class="lcard" data-level="selecionado" onclick="selectLevel(this)">
+        <div class="lcheck"><i class="ti ti-check" style="font-size:10px;color:#fff;"></i></div>
+        <div class="lcard-name">Canal Selecionado</div>
+        <div class="lcard-p1">15%</div><div class="lcard-s1">sobre venda</div>
+        <div class="lcard-p2">10%</div><div class="lcard-s2">recorrência</div>
+      </div>
+      <div class="lcard" data-level="premier" onclick="selectLevel(this)">
+        <div class="lcheck"><i class="ti ti-check" style="font-size:10px;color:#fff;"></i></div>
+        <div class="lcard-name">Canal Premier</div>
+        <div class="lcard-p1">22,5%</div><div class="lcard-s1">sobre venda</div>
+        <div class="lcard-p2">12,5%</div><div class="lcard-s2">recorrência</div>
+      </div>
+      <div class="lcard active" data-level="elite" onclick="selectLevel(this)">
+        <div class="lcheck"><i class="ti ti-check" style="font-size:10px;color:#fff;"></i></div>
+        <div class="lcard-name">Canal Elite</div>
+        <div class="lcard-p1">25%</div><div class="lcard-s1">sobre venda</div>
+        <div class="lcard-p2">15%</div><div class="lcard-s2">recorrência</div>
+      </div>
+    </div>
+
+    <div class="kpi-strip">
+      <div class="kpi-item">
+        <div class="kpi-lbl"><i class="ti ti-currency-dollar" style="font-size:12px;"></i> Comissão da venda</div>
+        <div class="kpi-val" id="kpiVenda">R$ 7.000</div>
+        <div class="kpi-note">pagamento único</div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-lbl"><i class="ti ti-refresh" style="font-size:12px;"></i> Receita mensal</div>
+        <div class="kpi-val acc" id="kpiMes">R$ 720/mês</div>
+        <div class="kpi-note">recorrente e vitalício</div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-lbl"><i class="ti ti-trophy" style="font-size:12px;"></i> Nível selecionado</div>
+        <div id="kpiNivel" style="margin-top:4px;"><span class="lvl-badge b-elite">Canal Elite</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- S3 -->
+  <div class="section">
+    <p class="sec-label">Seção 3 — Resultado Principal</p>
+    <p class="sec-title">Você receberá</p>
+    <div class="results-hero">
+      <div class="rcard main">
+        <div class="rcard-icon">💰</div>
+        <div class="rcard-label">Comissão da Venda</div>
+        <div class="rcard-val" id="resVenda">R$ 7.000</div>
+        <span class="rcard-tag tag-once">pagamento único</span>
+      </div>
+      <div class="rcard">
+        <div class="rcard-icon">🔄</div>
+        <div class="rcard-label">Receita Mensal</div>
+        <div class="rcard-val" id="resMes">R$ 720</div>
+        <span class="rcard-tag tag-rec">recorrente e vitalício</span>
+      </div>
+      <div class="rcard">
+        <div class="rcard-icon">📈</div>
+        <div class="rcard-label">Receita Anual</div>
+        <div class="rcard-val" id="resAnual">R$ 8.640</div>
+        <span class="rcard-tag tag-rec">12 meses de recorrência</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- S4 -->
+  <div class="section">
+    <p class="sec-label">Seção 4</p>
+    <p class="sec-title">Receita acumulada ao longo do tempo</p>
+    <div class="proj-block">
+      <div class="proj-top">
+        <span class="proj-top-label">Arraste para simular o tempo de recorrência</span>
+        <span class="proj-months-badge" id="projBadge">24 meses</span>
+      </div>
+      <div class="proj-val-row">
+        <span class="proj-val-big" id="projTotal">R$ 24.280</span>
+        <span class="proj-val-sub">acumulado</span>
+      </div>
+      <input type="range" class="proj-range" id="projSlider" min="1" max="120" value="24" step="1" oninput="updateProj()">
+      <div class="proj-track-labels">
+        <span>1 mês</span><span>2 anos</span><span>5 anos</span><span>8 anos</span><span>10 anos</span>
+      </div>
+      <div class="proj-breakdown">
+        <div class="pb-item">
+          <div class="pb-lbl">Comissão de venda (única)</div>
+          <div class="pb-val once" id="pbVenda">R$ 7.000</div>
+        </div>
+        <div class="pb-item">
+          <div class="pb-lbl">Recorrência acumulada</div>
+          <div class="pb-val rec" id="pbRec">R$ 17.280</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- S5 -->
+  <div class="section">
+    <p class="sec-label">Seção 5</p>
+    <p class="sec-title">Comparação entre níveis</p>
+    <div style="background:var(--glass);border:1px solid var(--glass-b);border-radius:12px;overflow:hidden;">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Nível</th>
+            <th>Comissão venda</th>
+            <th>Recorrência/mês</th>
+            <th>Ganho total (12m)</th>
+          </tr>
+        </thead>
+        <tbody id="compBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- S6 -->
+  <div class="section">
+    <p class="sec-label">Seção 6</p>
+    <p class="sec-title">Oportunidade de evolução</p>
+    <div class="evo-card">
+      <p class="evo-head" id="evoHead">🚀 Você está simulando como Canal Elite.</p>
+      <p class="evo-sub" id="evoSub"></p>
+      <div class="evo-row">
+        <div class="evo-item">
+          <div class="evo-item-lbl">Na venda (único)</div>
+          <div class="evo-item-val" id="evoVenda">R$ 7.000</div>
+        </div>
+        <div class="evo-item">
+          <div class="evo-item-lbl">Por mês (recorrente)</div>
+          <div class="evo-item-val" id="evoMes">R$ 720/mês</div>
+        </div>
+      </div>
+      <div class="evo-gain">
+        <div class="evo-gain-lbl">Ganho adicional anual vs. nível inferior</div>
+        <div class="evo-gain-val" id="evoGain">Você já está no nível máximo!</div>
+      </div>
+      <button class="evo-btn" onclick="window.open('mailto:parcerias@acomsistemas.com.br?subject=Quero evoluir meu nível de parceria', '_blank')">
+        🚀 Quero evoluir meu nível
+      </button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+  const LEVELS = [
+    { key:'parceiro',    name:'Parceiro Elite',    venda:0.10,  mens:0,     badge:'b-parc' },
+    { key:'selecionado', name:'Canal Selecionado', venda:0.15,  mens:0.10,  badge:'b-sel' },
+    { key:'premier',     name:'Canal Premier',     venda:0.225, mens:0.125, badge:'b-premier' },
+    { key:'elite',       name:'Canal Elite',       venda:0.25,  mens:0.15,  badge:'b-elite' },
+  ];
+  let cur = 'elite';
+
+  function getLvl(k) { return LEVELS.find(l => l.key === k); }
+  function fmt(n) { return 'R$ ' + Math.round(n).toLocaleString('pt-BR'); }
+
+  function selectLevel(el) {
+    document.querySelectorAll('.lcard').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    cur = el.dataset.level;
+    calc();
+  }
+
+  function updateProj() {
+    const impl = parseFloat(document.getElementById('impl').value) || 0;
+    const mens = parseFloat(document.getElementById('mens').value) || 0;
+    const lvl = getLvl(cur);
+    const cVenda = impl * lvl.venda;
+    const cMes = mens * lvl.mens;
+    const m = parseInt(document.getElementById('projSlider').value);
+    const rec = cMes * m;
+    const total = cVenda + rec;
+
+    document.getElementById('projBadge').textContent = m + (m === 1 ? ' mês' : ' meses');
+    document.getElementById('projTotal').textContent = fmt(total);
+    document.getElementById('pbVenda').textContent = fmt(cVenda);
+    document.getElementById('pbRec').textContent = fmt(rec);
+
+    const el = document.getElementById('projTotal');
+    el.style.color = '#f47a45';
+    setTimeout(() => { el.style.color = '#fff'; }, 300);
+  }
+
+  function calc() {
+    const impl = parseFloat(document.getElementById('impl').value) || 0;
+    const mens = parseFloat(document.getElementById('mens').value) || 0;
+    const lvl = getLvl(cur);
+    const cVenda = impl * lvl.venda;
+    const cMes = mens * lvl.mens;
+    const cAnual = cMes * 12;
+
+    document.getElementById('kpiVenda').textContent = fmt(cVenda);
+    document.getElementById('kpiMes').textContent = fmt(cMes) + '/mês';
+    document.getElementById('kpiNivel').innerHTML = '<span class="lvl-badge ' + lvl.badge + '">' + lvl.name + '</span>';
+    document.getElementById('resVenda').textContent = fmt(cVenda);
+    document.getElementById('resMes').textContent = fmt(cMes);
+    document.getElementById('resAnual').textContent = fmt(cAnual);
+
+    updateProj();
+    updateTable(impl, mens);
+    updateEvo(impl, mens, cVenda, cMes);
+  }
+
+  function updateTable(impl, mens) {
+    const rows = LEVELS.slice().reverse().map(lvl => {
+      const cv = impl * lvl.venda;
+      const cm = mens * lvl.mens;
+      const total = cv + cm * 12;
+      const act = lvl.key === cur;
+      return `<tr class="${act ? 'active-row' : ''}">
+        <td><span class="lvl-badge ${lvl.badge}">${lvl.name}</span></td>
+        <td>${fmt(cv)}</td>
+        <td>${cm > 0 ? fmt(cm) + '/mês' : '—'}</td>
+        <td style="font-weight:500;color:${act ? '#f47a45' : '#f0f4ff'};">${fmt(total)}</td>
+      </tr>`;
+    });
+    document.getElementById('compBody').innerHTML = rows.join('');
+  }
+
+  function updateEvo(impl, mens, cVenda, cMes) {
+    const idx = LEVELS.findIndex(l => l.key === cur);
+    const lvl = getLvl(cur);
+    document.getElementById('evoHead').textContent = '🚀 Você está simulando como ' + lvl.name + '.';
+    if (idx === LEVELS.length - 1) {
+      document.getElementById('evoSub').textContent = 'Você já está no nível mais alto — máximo ganho!';
+      document.getElementById('evoVenda').textContent = fmt(cVenda);
+      document.getElementById('evoMes').textContent = fmt(cMes) + '/mês';
+      document.getElementById('evoGain').textContent = 'Você já está no nível máximo!';
+      return;
+    }
+    const next = LEVELS[idx + 1];
+    const nV = impl * next.venda;
+    const nM = mens * next.mens;
+    const gain = (nV + nM * 12) - (cVenda + cMes * 12);
+    document.getElementById('evoSub').textContent = 'Se fosse ' + next.name + ' nesta mesma venda:';
+    document.getElementById('evoVenda').textContent = fmt(nV);
+    document.getElementById('evoMes').textContent = fmt(nM) + '/mês';
+    document.getElementById('evoGain').textContent = gain > 0 ? 'Ganho adicional anual: +' + fmt(gain) : fmt(gain);
+  }
+
+  calc();
+</script>
+</body>
+</html>
