@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central Executiva de Canais - Dashboard de Canais e Parcerias</title>
+  
+  <!-- CSS Principal -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- FontAwesome para Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js para Gráficos Interativos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- SheetJS para leitura de arquivos Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- BARRA LATERAL (SIDEBAR) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-logo">C</div>
+        <div class="brand-name">
+          Central Executiva
+          <span class="brand-subtitle">Canais e Parcerias</span>
+        </div>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item active">
+          <a href="#dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a href="#leads"><i class="fas fa-bullseye"></i> Indicações & Leads</a>
+        </li>
+        <li class="nav-item">
+          <a href="#prime"><i class="fas fa-crown"></i> Leads PRIME</a>
+        </li>
+        <li class="nav-item">
+          <a href="#travels"><i class="fas fa-plane-departure"></i> Viagens</a>
+        </li>
+        <li class="nav-item">
+          <a href="#relationships"><i class="fas fa-handshake"></i> Relacionamentos</a>
+        </li>
+        <li class="nav-item">
+          <a href="#contacts"><i class="fas fa-comments"></i> Contatos Semanais</a>
+        </li>
+        <li class="nav-item">
+          <a href="#sharing"><i class="fas fa-share-alt"></i> Compartilhamento</a>
+        </li>
+      </ul>
+      
+      <div class="sidebar-footer">
+        <div class="user-badge">
+          <div class="user-avatar" id="sidebarUserAvatar">AC</div>
+          <div class="user-info">
+            <span class="user-name" id="sidebarUserName">Você</span>
+            <span class="user-role" id="sidebarUserRole">ADMIN</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- CONTEÚDO PRINCIPAL (MAIN CONTENT) -->
+    <main class="main-content">
+      
+      <!-- HEADER PRINCIPAL -->
+      <header class="main-header">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <button class="mobile-menu-btn" id="mobileMenuBtn" style="display: none;">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="header-title-area">
+            <h1>Central Executiva de Canais</h1>
+            <p>Acompanhamento analítico e evolução da área de parcerias da empresa.</p>
+          </div>
+        </div>
+        
+        <div class="header-actions">
+          <!-- SIMULAÇÃO DE PERFIL -->
+          <div class="simulation-bar">
+            <span class="simulation-label"><i class="fas fa-user-shield"></i> Simular Acesso:</span>
+            <select class="simulation-select" id="profileSelect">
+              <!-- Preenchido via app.js -->
+            </select>
+          </div>
+          
+          <!-- IMPORTAR EXCEL -->
+          <input type="file" id="excelFileInput" accept=".xlsx,.xls" style="display:none">
+          <button class="btn btn-primary" id="btnImportExcel" title="Importar dados do Excel" style="display:flex;align-items:center;gap:6px;padding:8px 14px;font-size:0.85rem;">
+            <i class="fas fa-file-excel"></i> Importar Excel
+          </button>
+
+          <!-- ALTERNAR TEMA -->
+          <button class="theme-toggle" id="themeToggleBtn" title="Alternar Tema Escuro/Claro">
+            <i class="fas fa-sun"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- BANNER DE INFORMAÇÃO DO VISUALIZADOR -->
+      <div class="viewer-banner" id="viewerBanner" style="display: none;">
+        <i class="fas fa-info-circle"></i>
+        <span>
+          <strong>Perfil de Visualizador Ativo:</strong> Você está acessando como <span id="viewerName">Nome</span>.
+          Funcionalidades de inserção, edição e exclusão estão indisponíveis neste perfil.
+        </span>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- ABA 1: DASHBOARD GERAL                          -->
+      <!-- ============================================== -->
+      <section class="app-section active-section" id="dashboard">
+        <!-- Grid de Métricas Rápida -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon-box blue">
+              <i class="fas fa-bullseye"></i>
+            </div>
+            <div class="metric-details">
+              <span class="metric-title">Leads Indicados / Mês</span>
+              <span class="metric-value" id="metricLeadsMonth">0</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon-box purple">
+              <i class="fas fa-handshake"></i>
+            </div>
+            <div class="metric-details">
+              <span class="metric-title">Parceiros Indicadores</span>
+              <span class="metric-value" id="metricPartnersCount">0</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon-box green">
+              <i class="fas fa-crown"></i>
+            </div>
+            <div class="metric-details">
+              <span class="metric-title">Leads PRIME Ativos</span>
+              <span class="metric-value" id="metricPrimeCount">0</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon-box amber">
+              <i class="fas fa-plane-departure"></i>
+            </div>
+            <div class="metric-details">
+              <span class="metric-title">Viagens Realizadas</span>
+              <span class="metric-value" id="metricTravelsCount">0</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon-box indigo">
+              <i class="fas fa-comments"></i>
+            </div>
+            <div class="metric-details">
+              <span class="metric-title">Contatos na Semana</span>
+              <span class="metric-value" id="metricContactsWeek">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-grid">
+          <!-- Resumo Executivo Semanal -->
+          <div class="executive-summary-panel">
+            <div class="summary-header">
+              <h3 class="summary-title"><i class="fas fa-file-alt"></i> Resumo Executivo da Semana</h3>
+              <span class="update-badge">Atualizado: <span id="lastUpdateText">--/--/---- --:--</span></span>
+            </div>
+            <div class="summary-content" id="executiveSummaryContent">
+              <!-- Inserido dinamicamente pelo motor lógico -->
+            </div>
+          </div>
+
+          <!-- Evolução de Leads Gráfico -->
+          <div class="panel">
+            <div class="panel-header">
+              <h3 class="panel-title"><i class="fas fa-chart-area"></i> Evolução Acumulada Semanal</h3>
+            </div>
+            <div class="chart-container">
+              <canvas id="leadsCumulativeChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- ABA 2: INDICAÇÕES E LEADS                       -->
+      <!-- ============================================== -->
+      <section class="app-section" id="leads">
+        <div class="section-grid">
+          <!-- Lista de Indicações -->
+          <div class="panel">
+            <div class="panel-header">
+              <h3 class="panel-title"><i class="fas fa-list"></i> Registro de Leads Indicados</h3>
+              <button class="btn btn-primary btn-add-record" id="btnOpenAddLead">
+                <i class="fas fa-plus"></i> Novo Registro
+              </button>
+            </div>
+            <div class="table-wrapper">
+              <table class="custom-table" id="leadsTable">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Parceiro</th>
+                    <th>Quantidade</th>
+                    <th class="btn-write" style="width: 80px;">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Preenchido via app.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Ranking de Parceiros -->
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <!-- Parceiro Destaque -->
+            <div class="highlight-box">
+              <div class="highlight-avatar">
+                <i class="fas fa-trophy"></i>
+              </div>
+              <div class="highlight-title">Parceiro Destaque do Mês</div>
+              <div class="highlight-name" id="partnerHighlightName">Carregando...</div>
+              <div class="highlight-score" id="partnerHighlightScore">-- leads</div>
+            </div>
+
+            <!-- Ranking Completo -->
+            <div class="panel">
+              <div class="panel-header" style="margin-bottom:16px;">
+                <h3 class="panel-title" style="font-size:1rem;"><i class="fas fa-medal"></i> Ranking de Parceiros</h3>
+              </div>
+              <div class="ranking-list" id="partnersRankingList">
+                <!-- Preenchido via app.js -->
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-top:20px; font-size:0.85rem; color:var(--text-secondary); border-top:1px solid var(--border-color); padding-top:12px;">
+                <span>Total Leads: <strong id="secLeadsTotal">0</strong></span>
+                <span>Parceiros: <strong id="secPartnersCount">0</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- ABA 3: LEADS PRIME                             -->
+      <!-- ============================================== -->
+      <section class="app-section" id="prime">
+        <div class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title"><i class="fas fa-crown"></i> Acompanhamento de Leads PRIME</h3>
+            <button class="btn btn-primary btn-add-record" id="btnOpenAddPrime">
+              <i class="fas fa-plus"></i> Novo PRIME
+            </button>
+          </div>
+          <div class="table-wrapper">
+            <table class="custom-table" id="primeTable">
+              <thead>
+                <tr>
+                  <th style="width: 200px;">Empresa</th>
+                  <th>Status Atual</th>
+                  <th style="width: 250px;">Próximo Passo</th>
+                  <th class="btn-write" style="width: 120px; text-align:right">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Preenchido via app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- ABA 4: VIAGENS                                 -->
+      <!-- ============================================== -->
+      <section class="app-section" id="travels">
+        <div class="section-grid">
+          <!-- Timeline Vertical -->
+          <div class="panel">
+            <div class="panel-header">
+              <h3 class="panel-title"><i class="fas fa-route"></i> Roteiro e Histórico de Viagens</h3>
+              <button class="btn btn-primary btn-add-record" id="btnOpenAddTravel">
+                <i class="fas fa-plus"></i> Registrar Viagem
+              </button>
+            </div>
+            
+            <div class="timeline" id="travelsTimeline">
+              <!-- Timeline dos Registros de Viagem via app.js -->
+            </div>
+          </div>
+
+          <!-- Totalizador -->
+          <div class="panel" style="align-self:flex-start; text-align:center; padding: 32px 24px;">
+            <div class="highlight-avatar" style="margin: 0 auto 16px auto; background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%)">
+              <i class="fas fa-plane"></i>
+            </div>
+            <h3 class="panel-title" style="justify-content:center; font-size:1.1rem; margin-bottom:8px;">Viagens Realizadas no Mês</h3>
+            <div style="font-size:3rem; font-weight:800; color:var(--text-primary); line-height:1;" id="secTravelsCount">0</div>
+            <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:16px;">
+              Acompanhamento de visitas técnicas e comerciais para ampliação da capilaridade de mercado.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- ABA 5: RELACIONAMENTO COM PARCEIROS            -->
+      <!-- ============================================== -->
+      <section class="app-section" id="relationships">
+        <div class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title"><i class="fas fa-handshake"></i> Gestão de Relacionamento Contínuo</h3>
+            <button class="btn btn-primary btn-add-record" id="btnOpenAddRelationship">
+              <i class="fas fa-plus"></i> Adicionar Parceiro
+            </button>
+          </div>
+          <div class="relationship-grid" id="relationshipsGrid">
+            <!-- Cards de Relacionamento preenchidos via app.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- ABA 6: CONTATOS REALIZADOS                     -->
+      <!-- ============================================== -->
+      <section class="app-section" id="contacts">
+        <div class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title"><i class="fas fa-calendar-check"></i> Contatos Realizados (Agrupamento Semanal)</h3>
+            <button class="btn btn-primary btn-add-record" id="btnOpenAddContact">
+              <i class="fas fa-plus"></i> Novo Contato
+            </button>
+          </div>
+          
+          <div class="weekly-contacts-container" id="weeklyContactsList">
+            <!-- Agrupados por semana no app.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- ABA 7: COMPARTILHAMENTO                         -->
+      <!-- ============================================== -->
+      <section class="app-section" id="sharing">
+        <div class="user-management-grid">
+          <!-- Coluna 1: Lista de Usuários e Convites -->
+          <div class="panel">
+            <div class="panel-header">
+              <h3 class="panel-title"><i class="fas fa-users-cog"></i> Usuários com Acesso</h3>
+              <button class="btn btn-primary btn-add-record" id="btnOpenInviteUser">
+                <i class="fas fa-user-plus"></i> Convidar Usuário
+              </button>
+            </div>
+            
+            <div class="table-wrapper">
+              <table class="custom-table" id="sharedUsersTable">
+                <thead>
+                  <tr>
+                    <th>Usuário</th>
+                    <th>Perfil</th>
+                    <th>Origem</th>
+                    <th style="width: 80px; text-align:right">Remover</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Preenchido via app.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Coluna 2: Log de Acesso -->
+          <div class="panel">
+            <div class="panel-header">
+              <h3 class="panel-title"><i class="fas fa-history"></i> Log de Acessos</h3>
+            </div>
+            <div class="access-logs-list" id="accessLogsList">
+              <!-- Logs populados via app.js -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAIS DE DIÁLOGO                              -->
+  <!-- ============================================== -->
+  
+  <!-- MODAL: Adicionar Lead -->
+  <div class="modal-overlay" id="addLeadModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Novo Registro de Leads</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="leadForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="leadDate">Data da Indicação *</label>
+            <input type="date" class="form-input" id="leadDate" required value="2026-06-08">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="leadPartner">Parceiro que Indicou *</label>
+            <input type="text" class="form-input" id="leadPartner" placeholder="Ex: Linx, Oracle" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="leadQty">Quantidade de Leads *</label>
+            <input type="number" class="form-input" id="leadQty" min="1" placeholder="Ex: 5" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar Registro</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Adicionar Lead PRIME -->
+  <div class="modal-overlay" id="addPrimeModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Adicionar Lead PRIME</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="primeForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="primeCompany">Empresa *</label>
+            <input type="text" class="form-input" id="primeCompany" placeholder="Ex: Oracle" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="primeStatus">Status Atual *</label>
+            <textarea class="form-textarea" id="primeStatus" placeholder="Status descritivo..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="primeNextStep">Próximo Passo *</label>
+            <input type="text" class="form-input" id="primeNextStep" placeholder="Ex: Apresentação técnica" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Adicionar PRIME</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Editar Lead PRIME -->
+  <div class="modal-overlay" id="editPrimeModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Editar Lead PRIME</h3>
+        <button class="modal-close" id="closeEditPrimeModal"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="editPrimeForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="editPrimeCompany">Empresa *</label>
+            <input type="text" class="form-input" id="editPrimeCompany" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editPrimeStatus">Status Atual *</label>
+            <textarea class="form-textarea" id="editPrimeStatus" required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editPrimeNextStep">Próximo Passo *</label>
+            <input type="text" class="form-input" id="editPrimeNextStep" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('editPrimeModal')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Adicionar Viagem -->
+  <div class="modal-overlay" id="addTravelModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Registrar Viagem</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="travelForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="travelDate">Data *</label>
+            <input type="date" class="form-input" id="travelDate" required value="2026-06-08">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="travelCity">Cidade Visitada *</label>
+            <input type="text" class="form-input" id="travelCity" placeholder="Ex: São Paulo - SP" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="travelPartner">Parceiro Visitado *</label>
+            <input type="text" class="form-input" id="travelPartner" placeholder="Ex: Linx" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="travelResult">Resultado da Visita *</label>
+            <textarea class="form-textarea" id="travelResult" placeholder="Resumo do resultado..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="travelNextStep">Próximo Passo *</label>
+            <input type="text" class="form-input" id="travelNextStep" placeholder="Ação seguinte planejada..." required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar Viagem</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Adicionar Relacionamento -->
+  <div class="modal-overlay" id="addRelationshipModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Adicionar Acompanhamento de Relacionamento</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="relationshipForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="relPartner">Parceiro *</label>
+            <input type="text" class="form-input" id="relPartner" placeholder="Ex: Oracle" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="relSubject">Assunto Principal *</label>
+            <input type="text" class="form-input" id="relSubject" placeholder="Ex: Planejamento comercial conjunto" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="relLastUpdate">Última Atualização *</label>
+            <input type="date" class="form-input" id="relLastUpdate" required value="2026-06-08">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Adicionar Parceiro</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Adicionar Contato -->
+  <div class="modal-overlay" id="addContactModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Registrar Contato Realizado</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="contactForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="contactPartner">Parceiro *</label>
+            <input type="text" class="form-input" id="contactPartner" placeholder="Ex: Oracle" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contactSubject">Assunto Geral *</label>
+            <input type="text" class="form-input" id="contactSubject" placeholder="Ex: Estratégia comercial" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contactDate">Data do Contato *</label>
+            <input type="date" class="form-input" id="contactDate" required value="2026-06-08">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Registrar Contato</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Convidar Usuário -->
+  <div class="modal-overlay" id="inviteUserModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Convidar Usuário por E-mail</h3>
+        <button class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="inviteUserForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="inviteName">Nome Completo *</label>
+            <input type="text" class="form-input" id="inviteName" placeholder="Ex: João Silva" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inviteEmail">E-mail Corporativo *</label>
+            <input type="email" class="form-input" id="inviteEmail" placeholder="Ex: joao.silva@empresa.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inviteRole">Perfil de Acesso *</label>
+            <select class="form-select" id="inviteRole" required>
+              <option value="VISUALIZADOR" selected>Visualizador (Apenas Leitura)</option>
+              <option value="ADMIN">Administrador (Acesso Total)</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Enviar Convite</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts JS da Aplicação -->
+  <script src="mockData.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>

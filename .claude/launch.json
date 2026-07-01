@@ -21,6 +21,12 @@
       "runtimeArgs": ["-m", "http.server", "8123"],
       "cwd": "radar-de-parcerias",
       "port": 8123
+    },
+    {
+      "name": "portal-root",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8124"],
+      "port": 8124
     }
   ]
 }
