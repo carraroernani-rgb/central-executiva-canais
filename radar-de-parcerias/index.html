@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ===================== SEO / META ===================== -->
+<title>Radar de Parcerias · O que move canais, alianças e ecossistemas no Brasil</title>
+<meta name="description" content="Portal B2B sobre canais, alianças e ecossistemas no Brasil. Notícias, vagas, colunas, cursos e loja. Editado por Ernani Carraro.">
+<meta name="author" content="Ernani Carraro">
+<meta name="theme-color" content="#060A0E">
+<link rel="icon" href="data:,">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Radar de Parcerias · Tá no radar.">
+<meta property="og:description" content="O que move canais, alianças e ecossistemas no Brasil. Editado por Ernani Carraro.">
+<meta property="og:site_name" content="Radar de Parcerias">
+<meta property="og:locale" content="pt_BR">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Radar de Parcerias · Tá no radar.">
+<meta name="twitter:description" content="O que move canais, alianças e ecossistemas no Brasil.">
+
+<!-- ===================== FONTS ===================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#topo" class="nav__brand" aria-label="Radar de Parcerias — início">
+      <svg class="logo-svg" width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="beamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00E5FF"/>
+            <stop offset="100%" stop-color="#1AFF6B"/>
+          </linearGradient>
+        </defs>
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#1C2A38" stroke-width="3"/>
+        <circle cx="50" cy="50" r="30" fill="none" stroke="#1C2A38" stroke-width="2"/>
+        <circle cx="50" cy="50" r="14" fill="none" stroke="#1C2A38" stroke-width="2"/>
+        <path d="M50 50 L50 4 A46 46 0 0 1 92 62 Z" fill="url(#beamGrad)" opacity="0.35"/>
+        <circle cx="50" cy="50" r="4" fill="#00E5FF"/>
+        <circle cx="72" cy="30" r="3" fill="#1AFF6B"/>
+        <circle cx="30" cy="68" r="2.2" fill="#00E5FF"/>
+      </svg>
+      <span>Radar <span class="nav__brand-accent">de Parcerias</span></span>
+    </a>
+
+    <nav class="nav__links" aria-label="Navegação principal">
+      <a href="#noticias">Notícias</a>
+      <a href="#vagas">Vagas</a>
+      <a href="#colunas">Colunas</a>
+      <a href="#cursos">Cursos</a>
+      <a href="#loja">Loja</a>
+      <a href="#sobre">Sobre</a>
+    </nav>
+
+    <a href="#noticias" class="nav__cta">Entra no radar</a>
+
+    <button class="nav__burger" id="burgerBtn" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#noticias">Notícias</a>
+    <a href="#vagas">Vagas</a>
+    <a href="#colunas">Colunas</a>
+    <a href="#cursos">Cursos</a>
+    <a href="#loja">Loja</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#noticias" class="mobile-menu__cta">Entra no radar</a>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="topo">
+  <canvas id="radarCanvas" class="hero__canvas" aria-hidden="true"></canvas>
+
+  <div class="hero__content">
+    <p class="eyebrow">Portal B2B · Canais &amp; Parcerias</p>
+
+    <div class="hero__logo-row">
+      <svg class="hero__logo" width="56" height="56" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="beamGradHero" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00E5FF"/>
+            <stop offset="100%" stop-color="#1AFF6B"/>
+          </linearGradient>
+        </defs>
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#1C2A38" stroke-width="3"/>
+        <circle cx="50" cy="50" r="30" fill="none" stroke="#1C2A38" stroke-width="2"/>
+        <circle cx="50" cy="50" r="14" fill="none" stroke="#1C2A38" stroke-width="2"/>
+        <path d="M50 50 L50 4 A46 46 0 0 1 92 62 Z" fill="url(#beamGradHero)" opacity="0.4"/>
+        <circle cx="50" cy="50" r="4" fill="#00E5FF"/>
+        <circle cx="72" cy="30" r="3" fill="#1AFF6B"/>
+        <circle cx="30" cy="68" r="2.2" fill="#00E5FF"/>
+      </svg>
+      <h1 class="hero__title">Radar <span class="hero__title-accent">de Parcerias</span></h1>
+    </div>
+
+    <p class="hero__founder">Fundado e editado por Ernani Carraro</p>
+
+    <p class="hero__tagline">O que move canais, alianças e ecossistemas no Brasil.</p>
+
+    <div class="hero__badges" role="list">
+      <span role="listitem">📰 Notícias</span>
+      <span role="listitem">💼 Vagas</span>
+      <span role="listitem">✍️ Colunas</span>
+      <span role="listitem">🎓 Cursos</span>
+      <span role="listitem">📚 Conteúdo Educativo</span>
+      <span role="listitem">🛍️ Loja</span>
+      <span role="listitem">📣 Banners de Destaque</span>
+    </div>
+
+    <div class="hero__actions">
+      <a href="#noticias" class="btn btn--primary">Ver as notícias</a>
+      <a href="#sobre" class="btn btn--ghost">Conhecer o Radar</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BANNERS DE DESTAQUE ===================== -->
+<section class="section section--destaques" id="destaques">
+  <div class="container">
+    <div class="destaques-header">
+      <p class="section__label" style="text-align:left;margin-bottom:0">📣 Destaques</p>
+      <a href="#" class="link-ver-mais">Ver todos →</a>
+    </div>
+    <div class="destaques-grid">
+      <div class="destaque-card destaque-card--principal">
+        <span class="destaque-tag">Ecossistema</span>
+        <h2 class="destaque-titulo">SAP amplia programa de parceiros no Brasil com foco em PMEs e novos verticais</h2>
+        <p class="destaque-desc">Empresa anuncia reestruturação do Partner Edge com mais margem e suporte técnico para VARs nacionais. Conheça o que muda.</p>
+        <div class="destaque-meta">
+          <span>01 Jul 2026</span>
+          <span>5 min de leitura</span>
+        </div>
+      </div>
+
+      <div class="destaque-card">
+        <span class="destaque-tag">Canais</span>
+        <h2 class="destaque-titulo">TOTVS anuncia novo modelo de comissão para distribuidores em 2026</h2>
+        <div class="destaque-meta">
+          <span>30 Jun 2026</span>
+          <span>3 min</span>
+        </div>
+      </div>
+
+      <div class="destaque-card">
+        <span class="destaque-tag">Vagas</span>
+        <h2 class="destaque-titulo">Alta demanda: 47 vagas abertas em gestão de canais e alianças no Brasil</h2>
+        <div class="destaque-meta">
+          <span>29 Jun 2026</span>
+          <span>2 min</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== NOTÍCIAS ===================== -->
+<section class="section" id="noticias">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <p class="section__label" style="text-align:left">📰 Notícias</p>
+        <h2 class="section__title section__title--left">O que tá no radar agora</h2>
+      </div>
+      <a href="#" class="btn btn--ghost">Ver todas →</a>
+    </div>
+
+    <div class="news-grid">
+      <article class="news-card">
+        <span class="news-tag">Programas de Parceria</span>
+        <h3>Salesforce abre inscrições para o Consulting Partner Summit 2026</h3>
+        <p>Evento reúne parceiros consultores da América Latina para alinhamento estratégico e certificações.</p>
+        <div class="news-meta">
+          <span class="news-date">28 Jun 2026</span>
+          <span class="news-read">4 min</span>
+        </div>
+      </article>
+
+      <article class="news-card">
+        <span class="news-tag">Cloud</span>
+        <h3>Microsoft Cloud Partner: o que mudou nas competências em 2026</h3>
+        <p>Nova estrutura de designações Solutions Partner exige novos requisitos técnicos e de performance.</p>
+        <div class="news-meta">
+          <span class="news-date">27 Jun 2026</span>
+          <span class="news-read">6 min</span>
+        </div>
+      </article>
+
+      <article class="news-card">
+        <span class="news-tag">Mercado</span>
+        <h3>Pesquisa: 68% das empresas SaaS no BR planejam dobrar canal indireto até 2027</h3>
+        <p>Levantamento com 200+ gestores de canais. ERP e CRM lideram a expansão.</p>
+        <div class="news-meta">
+          <span class="news-date">25 Jun 2026</span>
+          <span class="news-read">5 min</span>
+        </div>
+      </article>
+
+      <article class="news-card">
+        <span class="news-tag">Estratégia</span>
+        <h3>5 erros que matam programas de canal nos primeiros 6 meses</h3>
+        <p>Análise baseada em cases reais. Spoiler: o problema raramente é o parceiro.</p>
+        <div class="news-meta">
+          <span class="news-date">24 Jun 2026</span>
+          <span class="news-read">7 min</span>
+        </div>
+      </article>
+
+      <article class="news-card">
+        <span class="news-tag">Alianças</span>
+        <h3>Como a Linx estruturou seu ecossistema de 1.400 parceiros em 3 anos</h3>
+        <p>A jornada de reestruturação do programa de canais que virou referência no varejo digital.</p>
+        <div class="news-meta">
+          <span class="news-date">23 Jun 2026</span>
+          <span class="news-read">8 min</span>
+        </div>
+      </article>
+
+      <article class="news-card">
+        <span class="news-tag">Eventos</span>
+        <h3>PartnerTech Summit 2026: agenda e como garantir sua credencial</h3>
+        <p>Principal evento de canais B2B do Brasil acontece em agosto, em São Paulo.</p>
+        <div class="news-meta">
+          <span class="news-date">22 Jun 2026</span>
+          <span class="news-read">3 min</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VAGAS ===================== -->
+<section class="section section--alt" id="vagas">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <p class="section__label" style="text-align:left">💼 Vagas</p>
+        <h2 class="section__title section__title--left">Oportunidades em canais e parcerias</h2>
+      </div>
+      <a href="#" class="btn btn--ghost">Ver todas as vagas →</a>
+    </div>
+
+    <div class="vagas-list">
+      <a href="#" class="vaga-card">
+        <div class="vaga-info">
+          <span class="vaga-empresa">TOTVS</span>
+          <h3>Channel Manager — Linha ERP</h3>
+          <div class="vaga-tags">
+            <span>São Paulo · Híbrido</span>
+            <span>Sênior</span>
+            <span>CLT</span>
+          </div>
+        </div>
+        <div class="vaga-right">
+          <span class="vaga-data">Hoje</span>
+          <span class="vaga-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="#" class="vaga-card">
+        <div class="vaga-info">
+          <span class="vaga-empresa">Salesforce</span>
+          <h3>Partner Success Manager — SMB</h3>
+          <div class="vaga-tags">
+            <span>Remoto</span>
+            <span>Pleno</span>
+            <span>CLT / PJ</span>
+          </div>
+        </div>
+        <div class="vaga-right">
+          <span class="vaga-data">Ontem</span>
+          <span class="vaga-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="#" class="vaga-card">
+        <div class="vaga-info">
+          <span class="vaga-empresa">Conta Azul</span>
+          <h3>Gerente de Alianças e Ecossistema</h3>
+          <div class="vaga-tags">
+            <span>Joinville · Remoto</span>
+            <span>Sênior</span>
+            <span>PJ</span>
+          </div>
+        </div>
+        <div class="vaga-right">
+          <span class="vaga-data">2 dias atrás</span>
+          <span class="vaga-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="#" class="vaga-card">
+        <div class="vaga-info">
+          <span class="vaga-empresa">Omie</span>
+          <h3>Analista de Canais Pleno</h3>
+          <div class="vaga-tags">
+            <span>São Paulo · Híbrido</span>
+            <span>Pleno</span>
+            <span>CLT</span>
+          </div>
+        </div>
+        <div class="vaga-right">
+          <span class="vaga-data">3 dias atrás</span>
+          <span class="vaga-arrow">→</span>
+        </div>
+      </a>
+
+      <a href="#" class="vaga-card">
+        <div class="vaga-info">
+          <span class="vaga-empresa">Startup SaaS (sigilo)</span>
+          <h3>Head de Canais — Primeiro contrato direto</h3>
+          <div class="vaga-tags">
+            <span>Remoto</span>
+            <span>Sênior / Diretoria</span>
+            <span>PJ</span>
+          </div>
+        </div>
+        <div class="vaga-right">
+          <span class="vaga-data">5 dias atrás</span>
+          <span class="vaga-arrow">→</span>
+        </div>
+      </a>
+    </div>
+
+    <p class="vagas-cta-text">Quer publicar uma vaga no Radar? <a href="mailto:contato@radardeparcerias.com.br" class="link-cyan">Entre em contato</a></p>
+  </div>
+</section>
+
+<!-- ===================== COLUNAS ===================== -->
+<section class="section" id="colunas">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <p class="section__label" style="text-align:left">✍️ Colunas</p>
+        <h2 class="section__title section__title--left">Vozes do ecossistema</h2>
+      </div>
+      <a href="#" class="btn btn--ghost">Ver todas as colunas →</a>
+    </div>
+    <p class="section__subtitle" style="text-align:left;margin-left:0;max-width:560px;margin-bottom:48px">Colunistas convidados com curadoria editorial do Radar. Gente que vive a operação, não só fala sobre ela.</p>
+
+    <div class="colunas-grid">
+      <article class="coluna-card">
+        <div class="coluna-autor">
+          <div class="coluna-avatar" aria-hidden="true">MC</div>
+          <div>
+            <strong>Maria Costa</strong>
+            <span>VP de Parceiros · SAP Brasil</span>
+          </div>
+        </div>
+        <h3>Como estruturei um programa do zero para 500 parceiros ativos</h3>
+        <p>A jornada real, com os erros que ninguém conta em palco de conferência.</p>
+        <span class="coluna-data">28 Jun 2026</span>
+      </article>
+
+      <article class="coluna-card">
+        <div class="coluna-autor">
+          <div class="coluna-avatar" aria-hidden="true">RP</div>
+          <div>
+            <strong>Ricardo Pires</strong>
+            <span>Channel Director · ISV SaaS</span>
+          </div>
+        </div>
+        <h3>Alianças vs. Canais: a diferença que importa e que a maioria ignora</h3>
+        <p>Não é semântica. São modelos de go-to-market completamente distintos.</p>
+        <span class="coluna-data">21 Jun 2026</span>
+      </article>
+
+      <article class="coluna-card">
+        <div class="coluna-autor">
+          <div class="coluna-avatar" aria-hidden="true">AM</div>
+          <div>
+            <strong>Ana Melo</strong>
+            <span>Partner Marketing Lead</span>
+          </div>
+        </div>
+        <h3>Por que seu parceiro não vende? A resposta honesta que você não quer ouvir</h3>
+        <p>Spoiler: o problema está no seu programa, não no parceiro.</p>
+        <span class="coluna-data">14 Jun 2026</span>
+      </article>
+
+      <article class="coluna-card">
+        <div class="coluna-autor">
+          <div class="coluna-avatar" aria-hidden="true">FS</div>
+          <div>
+            <strong>Felipe Souza</strong>
+            <span>Founder · Canal Direto</span>
+          </div>
+        </div>
+        <h3>Ecossistema não é buzz: como montar o seu do zero em 90 dias</h3>
+        <p>Framework prático para quem começa sem orçamento e sem stack de parceiros.</p>
+        <span class="coluna-data">07 Jun 2026</span>
+      </article>
+    </div>
+
+    <div class="colunas-cta">
+      <p>Quer escrever para o Radar?</p>
+      <a href="mailto:contato@radardeparcerias.com.br" class="btn btn--ghost">Propor uma coluna →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CURSOS & CONTEÚDO EDUCATIVO ===================== -->
+<section class="section section--alt" id="cursos">
+  <div class="container">
+    <p class="section__label">🎓 Aprenda</p>
+    <h2 class="section__title">Radar Academy &amp; Conteúdo</h2>
+    <p class="section__subtitle">Cursos práticos e guias gratuitos pra quem quer montar, estruturar ou escalar um programa de parcerias.</p>
+
+    <div class="aprenda-grid">
+
+      <!-- CURSOS PAGOS -->
+      <div class="aprenda-col">
+        <h3 class="aprenda-col__titulo">🎓 Radar Academy — Cursos</h3>
+        <div class="cursos-list">
+
+          <div class="curso-card">
+            <div class="curso-badge curso-badge--novo">Novo</div>
+            <h4>Montando seu Programa de Canais do Zero</h4>
+            <p>Da estratégia ao onboarding do primeiro parceiro. 8 módulos, 40+ aulas.</p>
+            <div class="curso-footer">
+              <span class="curso-preco">R$ 497</span>
+              <a href="#" class="btn btn--primary btn--sm">Quero acessar</a>
+            </div>
+          </div>
+
+          <div class="curso-card">
+            <div class="curso-badge curso-badge--popular">Popular</div>
+            <h4>Ativação de Parceiros: do contrato à primeira venda</h4>
+            <p>Como garantir que o parceiro recrutado de fato venda nos primeiros 30 dias.</p>
+            <div class="curso-footer">
+              <span class="curso-preco">R$ 297</span>
+              <a href="#" class="btn btn--primary btn--sm">Quero acessar</a>
+            </div>
+          </div>
+
+          <div class="curso-card curso-card--em-breve">
+            <div class="curso-badge curso-badge--breve">Em breve</div>
+            <h4>Métricas e KPIs de Canais para Gestores</h4>
+            <p>O que medir, como reportar e como usar dados pra tomar decisões melhores.</p>
+            <div class="curso-footer">
+              <span class="curso-preco">—</span>
+              <a href="#" class="btn btn--ghost btn--sm">Avisar quando sair</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CONTEÚDO EDUCATIVO GRATUITO -->
+      <div class="aprenda-col">
+        <h3 class="aprenda-col__titulo">📚 Conteúdo Educativo — Gratuito</h3>
+        <p class="aprenda-col__sub">Pra quem está começando ou quer estruturar melhor seu ecossistema de parcerias.</p>
+        <div class="edu-list">
+
+          <a href="#" class="edu-item">
+            <span class="edu-icon">📄</span>
+            <div>
+              <strong>Guia: Como montar um programa de canais em 90 dias</strong>
+              <span>PDF gratuito · 24 páginas</span>
+            </div>
+            <span class="edu-arrow">↓</span>
+          </a>
+
+          <a href="#" class="edu-item">
+            <span class="edu-icon">📄</span>
+            <div>
+              <strong>Template: Contrato de parceria comentado</strong>
+              <span>DOCX gratuito · cláusulas explicadas</span>
+            </div>
+            <span class="edu-arrow">↓</span>
+          </a>
+
+          <a href="#" class="edu-item">
+            <span class="edu-icon">🎙️</span>
+            <div>
+              <strong>Radar Talks: Como estruturar tiers de parceiros</strong>
+              <span>Vídeo gratuito · 38 min</span>
+            </div>
+            <span class="edu-arrow">▶</span>
+          </a>
+
+          <a href="#" class="edu-item">
+            <span class="edu-icon">📊</span>
+            <div>
+              <strong>Planilha: Dashboard de KPIs de canais</strong>
+              <span>Sheets gratuito · métricas prontas</span>
+            </div>
+            <span class="edu-arrow">↓</span>
+          </a>
+
+          <a href="#" class="edu-item">
+            <span class="edu-icon">📄</span>
+            <div>
+              <strong>Checklist: Onboarding de novo parceiro</strong>
+              <span>PDF gratuito · 12 etapas</span>
+            </div>
+            <span class="edu-arrow">↓</span>
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LOJA ===================== -->
+<section class="section" id="loja">
+  <div class="container">
+    <p class="section__label">🛍️ Loja</p>
+    <h2 class="section__title">Vista o radar</h2>
+    <p class="section__subtitle">Camisetas, moletons e acessórios pra quem vive de canais. Qualidade premium, identidade de quem tá no radar.</p>
+
+    <div class="loja-grid">
+
+      <div class="merch-card">
+        <div class="merch-img merch-img--ciano" aria-label="Camiseta Tá no Radar">
+          <span class="merch-emoji">👕</span>
+          <span class="merch-label-img">Tá no radar.</span>
+        </div>
+        <div class="merch-info">
+          <h3>Camiseta Classic — "Tá no radar."</h3>
+          <p>100% algodão, silk em ciano sobre preto. Unissex, P ao GG.</p>
+          <div class="merch-footer">
+            <span class="merch-preco">R$ 89</span>
+            <a href="#" class="btn btn--primary btn--sm">Comprar</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="merch-card">
+        <div class="merch-img merch-img--dark" aria-label="Moletom Radar de Parcerias">
+          <span class="merch-emoji">🧥</span>
+          <span class="merch-label-img">Radar de Parcerias</span>
+        </div>
+        <div class="merch-info">
+          <h3>Moletom Logo — Radar de Parcerias</h3>
+          <p>Fleece premium, logo bordado em ciano. Fechado, P ao GGG.</p>
+          <div class="merch-footer">
+            <span class="merch-preco">R$ 189</span>
+            <a href="#" class="btn btn--primary btn--sm">Comprar</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="merch-card">
+        <div class="merch-img merch-img--verde" aria-label="Camiseta quote">
+          <span class="merch-emoji">👕</span>
+          <span class="merch-label-img">"Recrutar é fácil.<br>Ativar é o jogo."</span>
+        </div>
+        <div class="merch-info">
+          <h3>Camiseta Quote — "Recrutar é fácil."</h3>
+          <p>Quote icônica do Radar estampada. Algodão premium, unissex.</p>
+          <div class="merch-footer">
+            <span class="merch-preco">R$ 89</span>
+            <a href="#" class="btn btn--primary btn--sm">Comprar</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="merch-card">
+        <div class="merch-img merch-img--ciano" aria-label="Caneca Radar de Parcerias">
+          <span class="merch-emoji">☕</span>
+          <span class="merch-label-img">@radardeparcerias</span>
+        </div>
+        <div class="merch-info">
+          <h3>Caneca — "Tá no radar."</h3>
+          <p>Cerâmica 325ml, logo em ciano. Vai na máquina de lavar.</p>
+          <div class="merch-footer">
+            <span class="merch-preco">R$ 49</span>
+            <a href="#" class="btn btn--primary btn--sm">Comprar</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="loja-aviso">🚧 Loja em breve. <a href="mailto:contato@radardeparcerias.com.br" class="link-cyan">Cadastre-se para ser avisado no lançamento.</a></p>
+  </div>
+</section>
+
+<!-- ===================== MANIFESTO ===================== -->
+<section class="section section--alt" id="frases">
+  <div class="container">
+    <p class="section__label">Manifesto</p>
+    <h2 class="section__title">O que a gente acredita</h2>
+
+    <div class="quotes">
+      <blockquote class="quote"><p>Parceria não é favor. É estratégia de receita.</p></blockquote>
+      <blockquote class="quote"><p>Quem controla a distribuição controla o mercado.</p></blockquote>
+      <blockquote class="quote"><p>Canal não se constrói com contrato. Se constrói com cadência.</p></blockquote>
+      <blockquote class="quote"><p>Recrutar parceiro é fácil. Ativar é o jogo.</p></blockquote>
+      <blockquote class="quote"><p>Seu programa de canais não tem problema de volume. Tem problema de ativação.</p></blockquote>
+      <blockquote class="quote"><p>Parceiro que não vende no primeiro mês dificilmente vende no sexto.</p></blockquote>
+      <blockquote class="quote"><p>Ecossistema não é buzzword. É a forma mais barata de crescer.</p></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SOBRE ERNANI ===================== -->
+<section class="section" id="sobre">
+  <div class="container">
+    <div class="about">
+      <div class="about__photo" role="img" aria-label="Foto de Ernani Carraro">
+        <span>EC</span>
+      </div>
+      <div class="about__content">
+        <p class="section__label" style="text-align:left">Quem edita</p>
+        <h2 class="section__title section__title--left">Ernani Carraro</h2>
+        <p class="about__role">Head de Canais · Acom Sistemas (ERP Everest)</p>
+        <p class="about__bio">
+          Especialista em gestão de canais e ecossistemas de parceiros B2B/SaaS/ERP.
+          Depois de anos operando programas de parceria na prática — recrutando, ativando e escalando canais —
+          criou o Radar de Parcerias pra compartilhar o que realmente funciona (e o que não funciona) nesse mercado.
+          Marca pessoal em construção, sem filtro corporativo.
+        </p>
+        <a
+          href="https://www.linkedin.com/in/ernanicarraro/"
+          class="btn btn--ghost"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Perfil de Ernani Carraro no LinkedIn (abre em nova aba)"
+        >
+          Ver perfil no LinkedIn ↗
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RODAPÉ ===================== -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <svg width="24" height="24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="beamGradFooter" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00E5FF"/>
+            <stop offset="100%" stop-color="#1AFF6B"/>
+          </linearGradient>
+        </defs>
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#1C2A38" stroke-width="3"/>
+        <path d="M50 50 L50 4 A46 46 0 0 1 92 62 Z" fill="url(#beamGradFooter)" opacity="0.35"/>
+        <circle cx="50" cy="50" r="4" fill="#00E5FF"/>
+      </svg>
+      <p><strong>RADAR DE PARCERIAS</strong> · por Ernani Carraro · <span class="footer__slogan">Tá no radar.</span></p>
+    </div>
+
+    <div class="footer__social">
+      <a href="https://www.linkedin.com/in/ernanicarraro/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn do Radar de Parcerias (abre em nova aba)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+      </a>
+      <a href="#" aria-label="Instagram do Radar de Parcerias">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14c-.3.76-.5 1.64-.56 2.91C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.64.5 2.91.56 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-10.4a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0z"/></svg>
+      </a>
+      <a href="mailto:contato@radardeparcerias.com.br" aria-label="Enviar e-mail para contato@radardeparcerias.com.br">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 4h20v16H2V4zm2 2.4V18h16V6.4l-8 5.4-8-5.4zm.8-.4L12 9.8 19.2 6H4.8z"/></svg>
+      </a>
+    </div>
+
+    <p class="footer__email"><a href="mailto:contato@radardeparcerias.com.br">contato@radardeparcerias.com.br</a></p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

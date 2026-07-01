@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Notícias – Canais, Parcerias & Channel Sales</title>
+<style>
+  :root{
+    --bg:#0f1117;--panel:#1a1d27;--card:#22263a;--border:#2d3148;
+    --accent:#6c63ff;--accent2:#00d4aa;--text:#e8eaf0;--muted:#8b90a8;
+    --cat-partnerships:#6c63ff;--cat-channel:#00d4aa;--cat-elg:#f59e0b;--cat-brasil:#3b82f6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+  /* HEADER */
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 28px;background:var(--panel);border-bottom:1px solid var(--border);
+    position:sticky;top:0;z-index:100
+  }
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px}
+  .logo h1{font-size:16px;font-weight:700}
+  .logo p{font-size:11px;color:var(--muted);margin-top:1px}
+  .header-right{display:flex;align-items:center;gap:10px}
+  #btnRun{
+    display:flex;align-items:center;gap:7px;padding:10px 20px;border-radius:8px;
+    border:none;font-size:13px;font-weight:700;cursor:pointer;
+    background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff
+  }
+  #btnRun:hover{opacity:.87}
+  #btnRun.loading{opacity:.6;pointer-events:none}
+  .spinner{display:none;width:14px;height:14px;border:2px solid #fff4;border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+  #btnRun.loading .spinner{display:block}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* STATUS */
+  #statusBar{
+    display:flex;align-items:center;gap:16px;padding:8px 28px;
+    background:var(--panel);border-bottom:1px solid var(--border);font-size:12px;color:var(--muted);
+    flex-wrap:wrap
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);display:inline-block;margin-right:4px}
+  .dot.on{background:var(--accent2)}
+
+  /* FILTROS */
+  #filtrosBar{
+    display:flex;align-items:center;gap:8px;padding:12px 28px;
+    background:var(--panel);border-bottom:1px solid var(--border);flex-wrap:wrap
+  }
+  .chip{
+    padding:5px 13px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;
+    border:1px solid var(--border);color:var(--muted);background:transparent;transition:.15s
+  }
+  .chip.ativo{color:#fff}
+  .chip[data-c=""].ativo{background:var(--accent);border-color:var(--accent)}
+  .chip[data-c="Partnerships"].ativo{background:var(--cat-partnerships);border-color:var(--cat-partnerships)}
+  .chip[data-c="Channel Sales"].ativo{background:var(--cat-channel);border-color:var(--cat-channel)}
+  .chip[data-c="ELG"].ativo{background:var(--cat-elg);border-color:var(--cat-elg)}
+  .chip[data-c="Brasil"].ativo{background:var(--cat-brasil);border-color:var(--cat-brasil)}
+  .chip:hover:not(.ativo){border-color:var(--accent);color:var(--text)}
+  #busca{
+    margin-left:auto;padding:6px 12px;background:var(--card);border:1px solid var(--border);
+    border-radius:8px;color:var(--text);font-size:13px;width:200px
+  }
+  #busca:focus{outline:none;border-color:var(--accent)}
+
+  /* GRID */
+  #grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+    gap:14px;padding:20px 28px;
+    max-width:1600px;margin:0 auto
+  }
+
+  /* CARD */
+  .card{
+    background:var(--card);border:1px solid var(--border);border-radius:12px;
+    padding:16px;display:flex;flex-direction:column;gap:10px;
+    transition:.2s;cursor:pointer;position:relative;overflow:hidden
+  }
+  .card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    background:var(--cat-color,var(--accent))
+  }
+  .card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px #0004}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .card-fonte{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--fonte-color,var(--accent2))}
+  .card-cat{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700;color:#fff;background:var(--cat-color,var(--accent));flex-shrink:0}
+  .card-titulo{font-size:14px;font-weight:700;line-height:1.4;color:var(--text)}
+  .card-desc{font-size:12px;color:var(--muted);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+  .card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+  .card-data{font-size:11px;color:var(--muted)}
+  .card-link{font-size:12px;font-weight:600;color:var(--accent2);text-decoration:none}
+  .card-link:hover{text-decoration:underline}
+
+  /* EMPTY / LOADING */
+  #empty{display:none;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px;color:var(--muted);text-align:center;gap:12px}
+  #empty .big{font-size:52px}
+  #empty p{font-size:14px;max-width:280px;line-height:1.6}
+  #loading{display:none;flex-direction:column;align-items:center;padding:80px;color:var(--muted);gap:16px}
+  .spin-big{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+
+  /* TOAST */
+  #toast{position:fixed;bottom:20px;right:20px;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:600;z-index:300;transform:translateY(70px);transition:.3s;pointer-events:none}
+  #toast.show{transform:translateY(0)}
+  #toast.ok{background:#0d2f24;color:var(--accent2);border:1px solid var(--accent2)}
+  #toast.err{background:#2d1520;color:#ff8888;border:1px solid #ff4444}
+
+  /* contadores */
+  .cnt{font-size:11px;background:#2d3148;color:var(--muted);padding:2px 8px;border-radius:12px;margin-left:6px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">📡</div>
+    <div>
+      <h1>Radar de Mercado</h1>
+      <p>Channel Sales · Partnerships · Canais · ELG · Brasil</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <span id="lblTotal" style="font-size:12px;color:var(--muted)">–</span>
+    <button id="btnRun" onclick="runNow()">
+      <div class="spinner"></div>▶ Run Now
+    </button>
+  </div>
+</header>
+
+<div id="statusBar">
+  <span><span class="dot" id="dot1"></span><span id="lbl1">Aguardando…</span></span>
+  <span style="margin-left:auto;font-size:11px" id="lblUlt"></span>
+</div>
+
+<div id="filtrosBar">
+  <button class="chip ativo" data-c="">Todas</button>
+  <button class="chip" data-c="Partnerships">Partnerships</button>
+  <button class="chip" data-c="Channel Sales">Channel Sales</button>
+  <button class="chip" data-c="ELG">ELG</button>
+  <button class="chip" data-c="Brasil">Brasil 🇧🇷</button>
+  <input id="busca" type="search" placeholder="🔍 Filtrar notícias…" oninput="renderCards()"/>
+</div>
+
+<div id="loading"><div class="spin-big"></div><p>Buscando notícias…</p></div>
+<div id="empty"><div class="big">📭</div><p>Nenhuma notícia encontrada.<br>Clique em <b>Run Now</b> para buscar.</p></div>
+<div id="grid"></div>
+
+<div id="toast"></div>
+
+<script>
+const SRV = "http://localhost:3000";
+let todas = [];
+let catAtiva = "";
+
+const CAT_COLOR = {
+  "Partnerships": "#6c63ff",
+  "Channel Sales": "#00d4aa",
+  "ELG":           "#f59e0b",
+  "Brasil":        "#3b82f6",
+};
+
+const FONTE_COLOR = {
+  "Partnership Leaders": "#00d4aa",
+  "Crossbeam Blog":      "#6c63ff",
+  "PartnerHacker":       "#f59e0b",
+  "Channel Futures":     "#00d4aa",
+  "Channel Partners":    "#00d4aa",
+  "Channelnomics":       "#5ab3ff",
+  "CRN":                 "#5ab3ff",
+  "Nearbound":           "#f59e0b",
+  "Alliances Digest":    "#a78bfa",
+  "TI Inside":           "#3b82f6",
+  "IT Forum":            "#3b82f6",
+  "Canaltech":           "#3b82f6",
+  "Computerworld BR":    "#3b82f6",
+};
+
+async function runNow() {
+  const btn = document.getElementById("btnRun");
+  btn.classList.add("loading");
+  btn.innerHTML = '<div class="spinner" style="display:block"></div>Buscando…';
+
+  document.getElementById("loading").style.display = "flex";
+  document.getElementById("empty").style.display   = "none";
+  document.getElementById("grid").innerHTML        = "";
+  document.getElementById("dot1").className        = "dot";
+  document.getElementById("lbl1").textContent      = "Buscando notícias…";
+
+  try {
+    const r = await fetch(`${SRV}/api/noticias`);
+    todas = await r.json();
+    document.getElementById("dot1").className   = "dot on";
+    document.getElementById("lbl1").textContent = `${todas.length} notícias encontradas`;
+    document.getElementById("lblUlt").textContent = `Atualizado: ${new Date().toLocaleString("pt-BR")}`;
+    renderCards();
+    toast(`${todas.length} notícias carregadas`, "ok");
+  } catch(e) {
+    document.getElementById("lbl1").textContent = "Erro – servidor offline?";
+    toast("Servidor offline. Inicie com: cd server && node index.js", "err");
+  } finally {
+    document.getElementById("loading").style.display = "none";
+    btn.classList.remove("loading");
+    btn.innerHTML = '▶ Run Now';
+  }
+}
+
+function renderCards() {
+  const q      = (document.getElementById("busca").value || "").toLowerCase();
+  const grid   = document.getElementById("grid");
+  const empty  = document.getElementById("empty");
+
+  let lista = todas;
+
+  if (catAtiva) lista = lista.filter(n => n.cat === catAtiva);
+  if (q)        lista = lista.filter(n =>
+    (n.titulo + n.fonte + n.descricao).toLowerCase().includes(q)
+  );
+
+  document.getElementById("lblTotal").textContent = lista.length ? `${lista.length} notícias` : "";
+
+  if (!lista.length) {
+    grid.innerHTML = "";
+    empty.style.display = todas.length ? "flex" : "flex";
+    empty.querySelector("p").innerHTML = todas.length
+      ? "Nenhuma notícia para este filtro."
+      : 'Clique em <b>Run Now</b> para buscar.';
+    return;
+  }
+  empty.style.display = "none";
+
+  grid.innerHTML = lista.map(n => {
+    const cc = CAT_COLOR[n.cat]  || "#6c63ff";
+    const fc = FONTE_COLOR[n.fonte] || "#8b90a8";
+    return `
+    <div class="card" style="--cat-color:${cc};--fonte-color:${fc}" onclick="window.open('${esc(n.link)}','_blank')">
+      <div class="card-top">
+        <span class="card-fonte">${esc(n.fonte)}</span>
+        <span class="card-cat">${esc(n.cat)}</span>
+      </div>
+      <div class="card-titulo">${esc(n.titulo)}</div>
+      <div class="card-desc">${esc(n.descricao)}</div>
+      <div class="card-footer">
+        <span class="card-data">${n.dataBR || ""}</span>
+        <a class="card-link" href="${esc(n.link)}" target="_blank" onclick="event.stopPropagation()">Ler →</a>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// Filtros de categoria
+document.getElementById("filtrosBar").addEventListener("click", e => {
+  const chip = e.target.closest(".chip");
+  if (!chip) return;
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("ativo"));
+  chip.classList.add("ativo");
+  catAtiva = chip.dataset.c;
+  renderCards();
+});
+
+function esc(s) {
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function toast(msg, tipo) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.className = `show ${tipo}`;
+  setTimeout(() => t.className = "", 3500);
+}
+</script>
+</body>
+</html>

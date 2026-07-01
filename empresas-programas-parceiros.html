@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Empresas com Programas de Parceiros no Brasil</title>
+<style>
+  :root{
+    --bg:#0f1117;--panel:#1a1d27;--card:#22263a;--border:#2d3148;
+    --accent:#6c63ff;--accent2:#00d4aa;--text:#e8eaf0;--muted:#8b90a8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 28px;background:var(--panel);border-bottom:1px solid var(--border);
+    position:sticky;top:0;z-index:100
+  }
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px}
+  .logo h1{font-size:16px;font-weight:700}
+  .logo p{font-size:11px;color:var(--muted);margin-top:1px}
+
+  main{max-width:1200px;margin:0 auto;padding:32px 24px}
+  .page-title{font-size:28px;font-weight:800;margin-bottom:8px}
+  .page-subtitle{color:var(--muted);font-size:15px;margin-bottom:32px;max-width:700px;line-height:1.6}
+
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+  .filter-btn{
+    padding:7px 16px;border-radius:20px;border:1px solid var(--border);
+    background:var(--panel);color:var(--muted);cursor:pointer;font-size:13px;
+    transition:all .2s
+  }
+  .filter-btn.active,.filter-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+
+  .card{
+    background:var(--card);border:1px solid var(--border);border-radius:14px;
+    padding:22px;transition:transform .2s,border-color .2s;
+  }
+  .card:hover{transform:translateY(-3px);border-color:var(--accent)}
+
+  .card-header{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+  .company-logo{
+    width:52px;height:52px;border-radius:10px;
+    background:var(--panel);display:flex;align-items:center;justify-content:center;
+    font-size:22px;flex-shrink:0;border:1px solid var(--border);overflow:hidden
+  }
+  .company-logo img{width:100%;height:100%;object-fit:contain;padding:4px}
+  .company-info h3{font-size:16px;font-weight:700}
+  .company-info .segment{font-size:12px;color:var(--muted);margin-top:2px}
+
+  .badge{
+    display:inline-block;padding:3px 9px;border-radius:12px;font-size:11px;
+    font-weight:600;margin-top:6px
+  }
+  .badge-tech{background:rgba(108,99,255,.2);color:#a8a2ff}
+  .badge-telecom{background:rgba(0,212,170,.15);color:#00d4aa}
+  .badge-financeiro{background:rgba(59,130,246,.15);color:#60a5fa}
+  .badge-varejo{background:rgba(245,158,11,.15);color:#fbbf24}
+  .badge-industria{background:rgba(239,68,68,.15);color:#f87171}
+  .badge-educacao{background:rgba(168,85,247,.15);color:#c084fc}
+
+  .card-body p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+
+  .modelos{margin-bottom:12px}
+  .modelos-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+  .modelo-item{
+    display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:12px;
+  }
+  .modelo-dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);margin-top:4px;flex-shrink:0}
+
+  .card-footer{
+    display:flex;align-items:center;justify-content:space-between;
+    padding-top:12px;border-top:1px solid var(--border);margin-top:4px
+  }
+  .comissao{font-size:12px;color:var(--muted)}
+  .comissao strong{color:var(--accent2)}
+  .site-link{
+    font-size:12px;color:var(--accent);text-decoration:none;
+    display:flex;align-items:center;gap:4px
+  }
+  .site-link:hover{text-decoration:underline}
+
+  .section-title{
+    font-size:18px;font-weight:700;margin:36px 0 16px;
+    padding-bottom:10px;border-bottom:1px solid var(--border)
+  }
+  .section-title span{color:var(--accent)}
+
+  @media(max-width:600px){
+    .grid{grid-template-columns:1fr}
+    main{padding:20px 14px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🤝</div>
+    <div>
+      <h1>Parceiros Brasil</h1>
+      <p>Mapeamento de Programas de Parceiros</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <h2 class="page-title">Empresas com Programas de Parceiros no Brasil</h2>
+  <p class="page-subtitle">Mapeamento completo das principais empresas brasileiras e multinacionais com atuação no Brasil que possuem programas estruturados de parceiros, revendedores, afiliados e canais.</p>
+
+  <div class="filters" id="filters">
+    <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filter-btn" onclick="filtrar('tech',this)">Tecnologia</button>
+    <button class="filter-btn" onclick="filtrar('telecom',this)">Telecom</button>
+    <button class="filter-btn" onclick="filtrar('financeiro',this)">Financeiro</button>
+    <button class="filter-btn" onclick="filtrar('varejo',this)">Varejo / E-commerce</button>
+    <button class="filter-btn" onclick="filtrar('industria',this)">Indústria</button>
+    <button class="filter-btn" onclick="filtrar('educacao',this)">Educação</button>
+  </div>
+
+  <!-- TECNOLOGIA -->
+  <div class="section-title"><span>Tecnologia</span> — ERPs, CRMs, SaaS</div>
+  <div class="grid" id="grid">
+
+    <div class="card" data-seg="tech">
+      <div class="card-header">
+        <div class="company-logo">
+          <img src="https://www.totvs.com/wp-content/themes/totvs/assets/img/logo_totvs.svg" alt="TOTVS" onerror="this.style.display='none';this.parentNode.innerHTML='🟦'">
+        </div>
+        <div class="company-info">
+          <h3>TOTVS</h3>
+          <div class="segment">ERP / Gestão Empresarial</div>
+          <span class="badge badge-tech">Tecnologia</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Maior empresa de tecnologia do Brasil. Parceiros atuam como franquias, canais de revenda e integradores homologados em todo o país.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Franquias e Canais:</strong> revenda com exclusividade regional</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>ISV (Software Homologado):</strong> integração técnica ao ecossistema TOTVS</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Business Solution:</strong> venda de soluções complementares à base TOTVS</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Modelo: <strong>Revenda + Royalties</strong></div>
+        <a class="site-link" href="https://www.totvs.com/seja-um-parceiro/" target="_blank">🔗 seja-um-parceiro</a>
+      </div>
+    </div>
+
+    <div class="card" data-seg="tech">
+      <div class="card-header">
+        <div class="company-logo">🔵</div>
+        <div class="company-info">
+          <h3>SAP Brasil</h3>
+          <div class="segment">ERP Corporativo</div>
+          <span class="badge badge-tech">Tecnologia</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Programa SAP PartnerEdge com quatro modelos de engajamento para parceiros de todos os portes, com foco em PMEs via SAP Business One.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Build:</strong> desenvolva soluções no ecossistema SAP</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Sell:</strong> revenda de licenças SAP</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Service:</strong> consultoria e implementação</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Run:</strong> operação e suporte gerenciado</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Domina <strong>77%</strong> das 200 maiores empresas do Brasil</div>
+        <a class="site-link" href="https://www.sap.com/brazil/partners/partner-program.html" target="_blank">🔗 sap.com/brazil</a>
+      </div>
+    </div>
+
+    <div class="card" data-seg="tech">
+      <div class="card-header">
+        <div class="company-logo">☁️</div>
+        <div class="company-info">
+          <h3>Salesforce Brasil</h3>
+          <div class="segment">CRM / Plataforma de Vendas</div>
+          <span class="badge badge-tech">Tecnologia</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Programa de parceiros com acesso à plataforma Agentforce 360, ferramentas de criação de aplicações, geração de demanda e capacitação técnica.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Consulting Partner:</strong> implementação e consultoria</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>ISV Partner:</strong> desenvolvimento de apps no AppExchange</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Reseller:</strong> revenda de licenças</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Modelo: <strong>Revenue Share + Certificações</strong></div>
+        <a class="site-link" href="https://www.salesforce.com/br/partners/become-a-partner/" target="_blank">🔗 salesforce.com/br</a>
+      </div>
+    </div>
+
+    <div class="card" data-seg="tech">
+      <div class="card-header">
+        <div class="company-logo">📊</div>
+        <div class="company-info">
+          <h3>RD Station</h3>
+          <div class="segment">Marketing Digital / CRM</div>
+          <span class="badge badge-tech">Tecnologia</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Um dos maiores programas de parceiros do Brasil. Mais de 2.000 agências e consultorias participam, com comissões recorrentes por vendas.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Agências Parceiras:</strong> acesso a ferramentas e suporte dedicado</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Afiliados:</strong> 20% de comissão recorrente por venda</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Revendas:</strong> modelo com desconto na plataforma</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Comissão: <strong>20% recorrente</strong></div>
+        <a class="site-link" href="https://www.rdstation.com/parceiros/" target="_blank">🔗 rdstation.com/parceiros</a>
+      </div>
+    </div>
+
+    <div class="card" data-seg="tech">
+      <div class="card-header">
+        <div class="company-logo">💙</div>
+        <div class="company-info">
+          <h3>Conta Azul</h3>
+          <div class="segment">ERP para PMEs / Contabilidade</div>
+          <span class="badge badge-tech">Tecnologia</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Programa gratuito para escritórios contábeis e empresas de BPO Financeiro. Mais de 14.000 contabilidades parceiras no Brasil.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Contador Parceiro:</strong> gestão dos clientes com acesso ao Conta Azul Mais</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>BPO Financeiro:</strong> remuneração por recomendação + descontos progressivos</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Base: <strong>14.000+ parceiros</strong> contábeis</div>
+        <a class="site-link" href="https://contaazul.com/parceiros/" target="_blank">🔗 contaazul.com/parceiros</a>
+      </div>
+    </div>
+
+    <div class="card" data-seg="tech">
+      <div class="card-header">
+        <div class="company-logo">🟣</div>
+        <div class="company-info">
+          <h3>PipeRun</h3>
+          <div class="segment">CRM / Automação de Vendas</div>
+          <span class="badge badge-tech">Tecnologia</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Reabriu seu programa de parceiros em 2025 com meta de adicionar 200 novos consultores. Foco em receita recorrente e governança.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Finder:</strong> indicação com remuneração única por contrato fechado</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Partner:</strong> consultoria e suporte ao cliente</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Revenda:</strong> ciclo comercial completo com padrão PipeRun</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Meta 2026: <strong>+200 parceiros</strong></div>
+        <a class="site-link" href="https://crm.piperun.com/parceiros" target="_blank">🔗 piperun.com/parceiros</a>
+      </div>
+    </div>
+
+    <div class="card" data-seg="tech">
+      <div class="card-header">
+        <div class="company-logo">🔥</div>
+        <div class="company-info">
+          <h3>Hotmart</h3>
+          <div class="segment">Plataforma de Produtos Digitais</div>
+          <span class="badge badge-tech">Tecnologia</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Maior plataforma de infoprodutos do Brasil e da América Latina. Produtores configuram seus próprios programas de afiliados, com comissões definidas por eles.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Afiliado:</strong> comissões de até 80% do valor do produto</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Produtor + Afiliado:</strong> parceria de co-criação e divisão de receita</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Catálogo: <strong>400.000+ produtos</strong></div>
+        <a class="site-link" href="https://hotmart.com/pt-BR/parceiros" target="_blank">🔗 hotmart.com/parceiros</a>
+      </div>
+    </div>
+
+    <!-- TELECOM -->
+    <div class="card" data-seg="telecom">
+      <div class="card-header">
+        <div class="company-logo">📡</div>
+        <div class="company-info">
+          <h3>Intelbras</h3>
+          <div class="segment">Telecomunicações / Segurança</div>
+          <span class="badge badge-telecom">Telecom</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Empresa brasileira líder em segurança eletrônica, redes e energia solar. Programa de revenda com suporte técnico e comercial em todo o Brasil.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Revenda Autorizada:</strong> acesso a preços especiais e treinamentos</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Instalador Certificado:</strong> técnicos habilitados para instalar soluções Intelbras</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Distribuidor:</strong> parceiro de distribuição regional</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Presença: <strong>todos os estados</strong> brasileiros</div>
+        <a class="site-link" href="https://www.intelbras.com/pt-br/parceiros" target="_blank">🔗 intelbras.com/parceiros</a>
+      </div>
+    </div>
+
+    <div class="card" data-seg="telecom">
+      <div class="card-header">
+        <div class="company-logo">🔴</div>
+        <div class="company-info">
+          <h3>Vivo Empresas</h3>
+          <div class="segment">Telecomunicações / B2B</div>
+          <span class="badge badge-telecom">Telecom</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Programa de parceiros B2B da Vivo (Telefônica) para revenda de soluções corporativas de telecom, IoT e conectividade.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Parceiro Autorizado:</strong> revenda de planos e serviços Vivo Empresas</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Vivo Valoriza:</strong> mais de 400 parceiros de benefícios para clientes</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Rede: <strong>400+ parceiros</strong> de benefícios</div>
+        <a class="site-link" href="https://vivo.com.br/para-empresas/por-que-vivo-empresas/vivo-valoriza-empresas/seja-parceiro" target="_blank">🔗 vivo.com.br/parceiro</a>
+      </div>
+    </div>
+
+    <!-- FINANCEIRO -->
+    <div class="card" data-seg="financeiro">
+      <div class="card-header">
+        <div class="company-logo">💳</div>
+        <div class="company-info">
+          <h3>Livelo</h3>
+          <div class="segment">Programa de Pontos / Fidelidade</div>
+          <span class="badge badge-financeiro">Financeiro</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Maior programa de pontos do Brasil, joint venture entre Bradesco e Banco do Brasil. Parceiros aceitam ou emitem pontos Livelo na sua operação.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Parceiro de Resgate:</strong> seus clientes trocam pontos na sua loja</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Parceiro de Acúmulo:</strong> clientes ganham pontos ao comprar de você</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Parceiro Financeiro:</strong> bancos que emitem cartões Livelo</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Joint venture: <strong>Bradesco + Banco do Brasil</strong></div>
+        <a class="site-link" href="https://www.livelo.com.br" target="_blank">🔗 livelo.com.br</a>
+      </div>
+    </div>
+
+    <!-- VAREJO / E-COMMERCE -->
+    <div class="card" data-seg="varejo">
+      <div class="card-header">
+        <div class="company-logo">🛒</div>
+        <div class="company-info">
+          <h3>Mercado Livre</h3>
+          <div class="segment">E-commerce / Marketplace</div>
+          <span class="badge badge-varejo">Varejo</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Programa de afiliados do maior marketplace da América Latina. Crescimento de 310% em afiliados ativos em 2024. Comissões por venda.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Afiliados:</strong> até 16% de comissão por venda aprovada</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Criadores:</strong> criadores de conteúdo com link de afiliado</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Lojistas Parceiros:</strong> venda no marketplace com suporte Mercado Pago</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Comissão: <strong>até 16%</strong> por venda</div>
+        <a class="site-link" href="https://www.mercadolivre.com.br/l/afiliados-home" target="_blank">🔗 mercadolivre.com.br/afiliados</a>
+      </div>
+    </div>
+
+    <div class="card" data-seg="varejo">
+      <div class="card-header">
+        <div class="company-logo">🟠</div>
+        <div class="company-info">
+          <h3>Shopee Brasil</h3>
+          <div class="segment">E-commerce / Marketplace</div>
+          <span class="badge badge-varejo">Varejo</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Em 2026, Shopee expandiu parceria com Sebrae para capacitar pequenos negócios gratuitamente. Programa de afiliados ativo com links rastreáveis.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Afiliados Shopee:</strong> comissão por venda via link rastreável</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Parceria Shopee + Sebrae:</strong> capacitação gratuita para vendedores</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Parceria 2026: <strong>Shopee + Sebrae</strong></div>
+        <a class="site-link" href="https://shopee.com.br/m/shopee-affiliate-program" target="_blank">🔗 shopee.com.br/afiliados</a>
+      </div>
+    </div>
+
+    <!-- EDUCAÇÃO -->
+    <div class="card" data-seg="educacao">
+      <div class="card-header">
+        <div class="company-logo">🎓</div>
+        <div class="company-info">
+          <h3>SEBRAE</h3>
+          <div class="segment">Capacitação / Apoio a PMEs</div>
+          <span class="badge badge-educacao">Educação</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>O Sebrae atua como âncora de parcerias institucionais, conectando empresas de grande porte com pequenos negócios em programas de desenvolvimento.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Parceria Institucional:</strong> empresas apoiam PMEs com capacitação</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Programa Sebraetec:</strong> subsídio a consultorias técnicas</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Agente Local:</strong> extensionistas credenciados no interior</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Presença: <strong>todos os estados</strong> + 27 regionais</div>
+        <a class="site-link" href="https://sebrae.com.br" target="_blank">🔗 sebrae.com.br</a>
+      </div>
+    </div>
+
+    <!-- INDÚSTRIA -->
+    <div class="card" data-seg="industria">
+      <div class="card-header">
+        <div class="company-logo">🔵</div>
+        <div class="company-info">
+          <h3>Axis Communications</h3>
+          <div class="segment">Segurança / Câmeras IP</div>
+          <span class="badge badge-industria">Indústria</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>Programa global de Channel Partners com forte presença no Brasil. Revendedores e integradores de sistemas de segurança e vigilância.</p>
+        <div class="modelos">
+          <div class="modelos-title">Modelos de Parceria</div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Authorized Partner:</strong> revenda de produtos Axis</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Silver / Gold / Platinum:</strong> níveis com descontos e suporte crescentes</span></div>
+          <div class="modelo-item"><div class="modelo-dot"></div><span><strong>Application Developer:</strong> integração de software ao ecossistema</span></div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="comissao">Níveis: <strong>Authorized → Platinum</strong></div>
+        <a class="site-link" href="https://www.axis.com/partner/channel-partner-program" target="_blank">🔗 axis.com/partner</a>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- TABELA RESUMIDA -->
+  <div class="section-title">Visão Geral — <span>Resumo por Empresa</span></div>
+  <div style="overflow-x:auto">
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <thead>
+      <tr style="background:var(--panel);text-align:left">
+        <th style="padding:10px 14px;border-bottom:1px solid var(--border)">Empresa</th>
+        <th style="padding:10px 14px;border-bottom:1px solid var(--border)">Segmento</th>
+        <th style="padding:10px 14px;border-bottom:1px solid var(--border)">Modelo Principal</th>
+        <th style="padding:10px 14px;border-bottom:1px solid var(--border)">Destaque</th>
+        <th style="padding:10px 14px;border-bottom:1px solid var(--border)">Site</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:10px 14px;font-weight:600">TOTVS</td>
+        <td style="padding:10px 14px;color:var(--muted)">ERP</td>
+        <td style="padding:10px 14px">Franquias + Canais</td>
+        <td style="padding:10px 14px;color:var(--accent2)">Maior rede de ERP do país</td>
+        <td style="padding:10px 14px"><a href="https://www.totvs.com/seja-um-parceiro/" style="color:var(--accent)">totvs.com</a></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)">
+        <td style="padding:10px 14px;font-weight:600">SAP Brasil</td>
+        <td style="padding:10px 14px;color:var(--muted)">ERP</td>
+        <td style="padding:10px 14px">Build / Sell / Service / Run</td>
+        <td style="padding:10px 14px;color:var(--accent2)">77% das 200 maiores empresas</td>
+        <td style="padding:10px 14px"><a href="https://www.sap.com/brazil/partners/partner-program.html" style="color:var(--accent)">sap.com/brazil</a></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:10px 14px;font-weight:600">Salesforce</td>
+        <td style="padding:10px 14px;color:var(--muted)">CRM</td>
+        <td style="padding:10px 14px">ISV + Consulting + Reseller</td>
+        <td style="padding:10px 14px;color:var(--accent2)">Agentforce 360 para parceiros</td>
+        <td style="padding:10px 14px"><a href="https://www.salesforce.com/br/partners/" style="color:var(--accent)">salesforce.com/br</a></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)">
+        <td style="padding:10px 14px;font-weight:600">RD Station</td>
+        <td style="padding:10px 14px;color:var(--muted)">Marketing</td>
+        <td style="padding:10px 14px">Agências + Afiliados</td>
+        <td style="padding:10px 14px;color:var(--accent2)">2.000+ parceiros ativos</td>
+        <td style="padding:10px 14px"><a href="https://www.rdstation.com/parceiros/" style="color:var(--accent)">rdstation.com</a></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:10px 14px;font-weight:600">Conta Azul</td>
+        <td style="padding:10px 14px;color:var(--muted)">ERP / Contábil</td>
+        <td style="padding:10px 14px">Contadores + BPO</td>
+        <td style="padding:10px 14px;color:var(--accent2)">14.000+ contabilidades parceiras</td>
+        <td style="padding:10px 14px"><a href="https://contaazul.com/parceiros/" style="color:var(--accent)">contaazul.com</a></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)">
+        <td style="padding:10px 14px;font-weight:600">PipeRun</td>
+        <td style="padding:10px 14px;color:var(--muted)">CRM</td>
+        <td style="padding:10px 14px">Finder / Partner / Revenda</td>
+        <td style="padding:10px 14px;color:var(--accent2)">Meta +200 parceiros em 2026</td>
+        <td style="padding:10px 14px"><a href="https://crm.piperun.com/parceiros" style="color:var(--accent)">piperun.com</a></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:10px 14px;font-weight:600">Hotmart</td>
+        <td style="padding:10px 14px;color:var(--muted)">Infoprodutos</td>
+        <td style="padding:10px 14px">Afiliados</td>
+        <td style="padding:10px 14px;color:var(--accent2)">Até 80% de comissão</td>
+        <td style="padding:10px 14px"><a href="https://hotmart.com/pt-BR" style="color:var(--accent)">hotmart.com</a></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)">
+        <td style="padding:10px 14px;font-weight:600">Mercado Livre</td>
+        <td style="padding:10px 14px;color:var(--muted)">E-commerce</td>
+        <td style="padding:10px 14px">Afiliados + Marketplace</td>
+        <td style="padding:10px 14px;color:var(--accent2)">310% crescimento de afiliados</td>
+        <td style="padding:10px 14px"><a href="https://www.mercadolivre.com.br/l/afiliados-home" style="color:var(--accent)">mercadolivre.com.br</a></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:10px 14px;font-weight:600">Intelbras</td>
+        <td style="padding:10px 14px;color:var(--muted)">Telecom / Segurança</td>
+        <td style="padding:10px 14px">Revenda + Instalador</td>
+        <td style="padding:10px 14px;color:var(--accent2)">Empresa 100% brasileira</td>
+        <td style="padding:10px 14px"><a href="https://www.intelbras.com/pt-br/parceiros" style="color:var(--accent)">intelbras.com</a></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)">
+        <td style="padding:10px 14px;font-weight:600">Vivo Empresas</td>
+        <td style="padding:10px 14px;color:var(--muted)">Telecom</td>
+        <td style="padding:10px 14px">Parceiro Autorizado B2B</td>
+        <td style="padding:10px 14px;color:var(--accent2)">400+ parceiros de benefícios</td>
+        <td style="padding:10px 14px"><a href="https://vivo.com.br/para-empresas/por-que-vivo-empresas/vivo-valoriza-empresas/seja-parceiro" style="color:var(--accent)">vivo.com.br</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+</main>
+
+<script>
+function filtrar(seg, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.card').forEach(c => {
+    if (seg === 'todos' || c.dataset.seg === seg) {
+      c.style.display = '';
+    } else {
+      c.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>

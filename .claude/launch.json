@@ -2,10 +2,25 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "central-executiva",
-      "runtimeExecutable": "C:\\Users\\carra\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
-      "runtimeArgs": ["-m", "http.server", "3000"],
+      "name": "acom-bi",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+      "runtimeArgs": ["server/index.js"],
       "port": 3000
+    },
+    {
+      "name": "polar",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "polar",
+      "port": 5173,
+      "autoPort": true
+    },
+    {
+      "name": "radar-de-parcerias",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8123"],
+      "cwd": "radar-de-parcerias",
+      "port": 8123
     }
   ]
 }

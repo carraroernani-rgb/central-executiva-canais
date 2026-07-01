@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Notícias de Parcerias no Brasil — Portal Parceiros</title>
+<style>
+  :root{
+    --bg:#0f1117;--panel:#1a1d27;--card:#22263a;--border:#2d3148;
+    --accent:#6c63ff;--accent2:#00d4aa;--text:#e8eaf0;--muted:#8b90a8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 28px;background:var(--panel);border-bottom:1px solid var(--border);
+    position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px
+  }
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px}
+  .logo h1{font-size:16px;font-weight:700}
+  .logo p{font-size:11px;color:var(--muted);margin-top:1px}
+  .nav{display:flex;gap:6px}
+  .nav a{
+    padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;
+    text-decoration:none;color:var(--muted);transition:.2s
+  }
+  .nav a:hover,.nav a.active{background:var(--accent);color:#fff}
+
+  main{max-width:1180px;margin:0 auto;padding:32px 24px}
+
+  .hero-strip{
+    background:linear-gradient(135deg,rgba(108,99,255,.15),rgba(0,212,170,.1));
+    border:1px solid rgba(108,99,255,.3);border-radius:14px;
+    padding:24px 28px;margin-bottom:36px
+  }
+  .hero-strip h2{font-size:22px;font-weight:800;margin-bottom:6px}
+  .hero-strip p{color:var(--muted);font-size:14px;line-height:1.6}
+  .hero-tags{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .hero-tag{
+    padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;
+    background:rgba(108,99,255,.2);color:#a8a2ff;cursor:pointer;
+    border:none;transition:.2s
+  }
+  .hero-tag:hover{background:var(--accent);color:#fff}
+
+  .layout{display:grid;grid-template-columns:1fr 300px;gap:28px}
+  @media(max-width:860px){.layout{grid-template-columns:1fr}}
+
+  .news-list{display:flex;flex-direction:column;gap:16px}
+
+  .news-card{
+    background:var(--card);border:1px solid var(--border);border-radius:12px;
+    padding:20px;display:flex;gap:18px;transition:border-color .2s
+  }
+  .news-card:hover{border-color:var(--accent)}
+  .news-card.destaque{border-left:3px solid var(--accent);background:rgba(108,99,255,.06)}
+  .news-card.nova{border-left:3px solid var(--accent2)}
+
+  .news-icon{
+    width:44px;height:44px;border-radius:10px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;background:var(--panel)
+  }
+  .news-body{flex:1;min-width:0}
+  .news-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+
+  .tag{padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+  .tag-tech{background:rgba(108,99,255,.2);color:#a8a2ff}
+  .tag-canal{background:rgba(0,212,170,.15);color:#00d4aa}
+  .tag-varejo{background:rgba(245,158,11,.15);color:#fbbf24}
+  .tag-fintech{background:rgba(16,185,129,.2);color:#34d399}
+  .tag-startup{background:rgba(239,68,68,.15);color:#f87171}
+  .tag-ia{background:rgba(168,85,247,.15);color:#c084fc}
+  .tag-novo{background:rgba(0,212,170,.2);color:#00d4aa}
+
+  .news-date{font-size:11px;color:var(--muted)}
+  .news-source{font-size:11px;color:var(--muted);font-style:italic}
+
+  .news-body h3{font-size:15px;font-weight:700;line-height:1.4;margin-bottom:7px}
+  .news-body p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+
+  .news-link{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:6px 14px;border-radius:7px;font-size:12px;font-weight:600;
+    background:rgba(108,99,255,.15);color:var(--accent);
+    text-decoration:none;border:1px solid rgba(108,99,255,.25);
+    cursor:pointer;transition:.2s
+  }
+  .news-link:hover{background:var(--accent);color:#fff}
+
+  /* SIDEBAR */
+  .sidebar{display:flex;flex-direction:column;gap:20px}
+  .widget{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px}
+  .widget-title{font-size:12px;font-weight:700;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+
+  .trending-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+  .trending-item:last-child{border-bottom:none}
+  .trend-num{font-size:18px;font-weight:800;color:var(--border);min-width:22px;line-height:1.2}
+  .trend-text{font-size:13px;font-weight:600;line-height:1.4}
+  .trend-label{font-size:11px;color:var(--muted);margin-top:2px}
+
+  .category-list{display:flex;flex-direction:column;gap:2px}
+  .category-item{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:13px;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer
+  }
+  .category-item:last-child{border-bottom:none}
+  .category-item:hover .cat-name{color:var(--accent)}
+  .cat-count{font-size:11px;background:var(--panel);padding:2px 8px;border-radius:10px;color:var(--muted)}
+
+  .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .section-header h2{font-size:17px;font-weight:700}
+
+  .learn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:8px}
+  .learn-card{
+    background:var(--card);border:1px solid var(--border);border-radius:12px;
+    padding:18px;display:flex;flex-direction:column;gap:10px
+  }
+  .learn-card h3{font-size:14px;font-weight:700;line-height:1.4}
+  .learn-card p{font-size:13px;color:var(--muted);line-height:1.6;flex:1}
+  .separator{height:1px;background:var(--border);margin:32px 0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🤝</div>
+    <div>
+      <h1>Portal Parcerias Brasil</h1>
+      <p>O principal canal de notícias sobre parcerias do país</p>
+    </div>
+  </div>
+  <nav class="nav">
+    <a href="#noticias" class="active">Notícias</a>
+    <a href="#aprenda">Aprenda</a>
+  </nav>
+</header>
+
+<main>
+
+  <div class="hero-strip">
+    <h2>🤝 Parcerias que movem os negócios no Brasil</h2>
+    <p>Acordos, programas de parceiros, canais de distribuição, alianças entre startups e grandes empresas — tudo sobre o ecossistema de parcerias B2B no Brasil em 2026.</p>
+    <div class="hero-tags">
+      <button class="hero-tag">Tecnologia</button>
+      <button class="hero-tag">Startups</button>
+      <button class="hero-tag">Canais</button>
+      <button class="hero-tag">Fintech</button>
+      <button class="hero-tag">E-commerce</button>
+      <button class="hero-tag">IA</button>
+      <button class="hero-tag">SaaS</button>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- COLUNA PRINCIPAL -->
+    <div>
+
+      <div class="section-header" id="noticias">
+        <h2>Últimas Notícias</h2>
+      </div>
+
+      <div class="news-list">
+
+        <div class="news-card destaque">
+          <div class="news-icon">🔗</div>
+          <div class="news-body">
+            <div class="news-meta">
+              <span class="tag tag-tech">Tecnologia</span>
+              <span class="tag tag-novo">NOVO</span>
+              <span class="news-date">Dez 2025</span>
+              <span class="news-source">Startupi</span>
+            </div>
+            <h3>PipeRun reabre programa de parceiros após 3 anos e mira 200 novos consultores em 2026</h3>
+            <p>A PipeRun, CRM brasileiro para receita recorrente, reformulou completamente seu ecossistema de parcerias com três níveis: Finder (indicação), Partner (consultoria) e Revenda (ciclo completo). Após fechar o programa para novas adesões por 3 anos, a empresa retoma com meta de crescimento agressiva para 2026.</p>
+            <a class="news-link" onclick="window.open('https://www.nbnoticias.com.br/noticia/111788/piperun-reformula-canais-e-amplia-rede-de-parceiros','_blank')">🔗 Ler notícia completa</a>
+          </div>
+        </div>
+
+        <div class="news-card nova">
+          <div class="news-icon">🤖</div>
+          <div class="news-body">
+            <div class="news-meta">
+              <span class="tag tag-startup">Startup</span>
+              <span class="tag tag-ia">IA</span>
+              <span class="news-date">Mar 2026</span>
+              <span class="news-source">Estado de Minas</span>
+            </div>
+            <h3>Startup brasileira de IA inicia expansão internacional com parcerias em novos mercados</h3>
+            <p>Startup brasileira especializada em inteligência artificial anuncia expansão para mercados internacionais, abrindo frente de parcerias com empresas locais em cada país. O movimento reflete a tendência de startups nacionais usarem alianças estratégicas como principal alavanca de expansão global.</p>
+            <a class="news-link" onclick="window.open('https://www.em.com.br/mundo-corporativo/2026/03/7384746-startup-brasileira-de-ia-inicia-expansao-internacional.html','_blank')">🔗 Ler notícia completa</a>
+          </div>
+        </div>
+
+        <div class="news-card">
+          <div class="news-icon">🛒</div>
+          <div class="news-body">
+            <div class="news-meta">
+              <span class="tag tag-varejo">E-commerce</span>
+              <span class="news-date">2026</span>
+              <span class="news-source">Seu Dinheiro</span>
+            </div>
+            <h3>Shopee expande parceria com Sebrae para capacitar pequenos negócios gratuitamente</h3>
+            <p>A Shopee anunciou a expansão do programa de capacitação gratuita para pequenos negócios desenvolvido em parceria com o Sebrae. A iniciativa digitaliza empreendedores de todo o Brasil para vender no marketplace sem custo de entrada, com suporte técnico e educacional.</p>
+            <a class="news-link" onclick="window.open('https://www.seudinheiro.com/2026/seu-negocio/quer-vender-mais-na-shopee-plataforma-anuncia-expansao-de-programa-gratuito-para-pequenos-negocios-em-parceria-com-o-sebrae-giov/','_blank')">🔗 Ler notícia completa</a>
+          </div>
+        </div>
+
+        <div class="news-card">
+          <div class="news-icon">🏗️</div>
+          <div class="news-body">
+            <div class="news-meta">
+              <span class="tag tag-startup">Startup</span>
+              <span class="tag tag-ia">IA</span>
+              <span class="news-date">Dez 2025</span>
+              <span class="news-source">Link to Leaders</span>
+            </div>
+            <h3>Morada.ai capta R$ 17 milhões para expandir IA generativa em parceria com 200 incorporadoras</h3>
+            <p>A startup Morada.ai anunciou captação de R$ 17 milhões em rodada liderada pela Parceiro Ventures. A Mia, sua IA generativa, já é usada por quase 200 incorporadoras em 17 estados brasileiros. O capital será usado para ampliar parcerias com construtoras e imobiliárias em todo o país.</p>
+            <a class="news-link" onclick="window.open('https://linktoleaders.com/ecossistema-brasileiro-de-start-ups-balanco-de-2025-e-tendencias-para-2026-daniela-meirelles/','_blank')">🔗 Ler notícia completa</a>
+          </div>
+        </div>
+
+        <div class="news-card">
+          <div class="news-icon">🌐</div>
+          <div class="news-body">
+            <div class="news-meta">
+              <span class="tag tag-tech">Tecnologia</span>
+              <span class="tag tag-startup">Aquisição</span>
+              <span class="news-date">Nov 2025</span>
+              <span class="news-source">Exame</span>
+            </div>
+            <h3>Digibee adquire startup americana Vertify para escalar parceria em Revenue Operations</h3>
+            <p>A startup brasileira Digibee, especializada em integração de sistemas via nuvem, anunciou a aquisição da Vertify, empresa norte-americana de automação de RevOps. A previsão é que em 2026 metade das novas vendas venha de operações internacionais, usando o modelo de parcerias como motor de crescimento.</p>
+            <a class="news-link" onclick="window.open('https://exame.com/negocios/apos-compra-nos-eua-startup-do-brasil-quer-conectar-o-mundo-inteiro/','_blank')">🔗 Ler notícia completa</a>
+          </div>
+        </div>
+
+        <div class="news-card">
+          <div class="news-icon">💳</div>
+          <div class="news-body">
+            <div class="news-meta">
+              <span class="tag tag-fintech">Fintech</span>
+              <span class="tag tag-varejo">Varejo</span>
+              <span class="news-date">2026</span>
+              <span class="news-source">Finsiders Brasil</span>
+            </div>
+            <h3>Embedded finance: fintechs e varejistas formam parcerias para embutir crédito na jornada de compra</h3>
+            <p>O mercado de finanças embutidas movimenta R$ 23 bilhões por ano no Brasil. Fintechs como GIRO.TECH firmaram parcerias com Magalu, Lojas MM e Berlanda para oferecer crédito no ponto de venda. O modelo B2B2C — fintech infraestrutura + empresa de varejo + consumidor — cresce acima de 40% ao ano.</p>
+            <a class="news-link" onclick="window.open('https://finsidersbrasil.com.br/reportagem-exclusiva-fintechs/pagamentos-e-credito-b2b-atraem-novas-fintechs/','_blank')">🔗 Ler notícia completa</a>
+          </div>
+        </div>
+
+        <div class="news-card">
+          <div class="news-icon">📡</div>
+          <div class="news-body">
+            <div class="news-meta">
+              <span class="tag tag-startup">Startup</span>
+              <span class="news-date">2026</span>
+              <span class="news-source">Estado de Minas</span>
+            </div>
+            <h3>Hablla capta R$ 3,1 milhões e expande parceria de IA para WhatsApp corporativo na América Latina</h3>
+            <p>A Hablla, startup brasileira de IA para integração de WhatsApp a sistemas corporativos, captou R$ 3,1 milhões em rodada liderada pela Bossa Invest e abriu seu primeiro escritório fora do Brasil em Montevidéu. A expansão usa modelo de parcerias com revendedores locais em cada mercado.</p>
+            <a class="news-link" onclick="window.open('https://www.em.com.br/mundo-corporativo/2026/03/7384746-startup-brasileira-de-ia-inicia-expansao-internacional.html','_blank')">🔗 Ler notícia completa</a>
+          </div>
+        </div>
+
+        <div class="news-card">
+          <div class="news-icon">📊</div>
+          <div class="news-body">
+            <div class="news-meta">
+              <span class="tag tag-canal">Canal</span>
+              <span class="tag tag-tech">SaaS</span>
+              <span class="news-date">2026</span>
+              <span class="news-source">Canalize PRM</span>
+            </div>
+            <h3>Como estruturar parcerias e canais em 2026: guia prático para empresas brasileiras</h3>
+            <p>Com 83% dos CEOs de tech priorizando joint ventures e alianças em 2026 (alta de 30% vs. 2025, segundo EY), o modelo de canal de parceiros nunca foi tão estratégico. O guia aborda níveis de parceiros, política de comissionamento, uso de PRM e como escalar sem perder controle da qualidade.</p>
+            <a class="news-link" onclick="window.open('https://canalizeprm.com.br/blog/como-estruturar-parcerias-e-canais-em-2026/','_blank')">🔗 Ler notícia completa</a>
+          </div>
+        </div>
+
+      </div><!-- /news-list -->
+
+      <div class="separator"></div>
+
+      <!-- APRENDA -->
+      <div class="section-header" id="aprenda">
+        <h2>📚 Aprenda sobre Parcerias</h2>
+      </div>
+
+      <div class="learn-grid">
+
+        <div class="learn-card">
+          <div style="font-size:26px">🤝</div>
+          <h3>O que é um Programa de Parceiros?</h3>
+          <p>Uma estrutura formal para recrutar, qualificar e remunerar terceiros que ajudam a vender ou implementar seus produtos. Existem quatro modelos: <strong>Revenda</strong>, <strong>Indicação</strong>, <strong>Afiliados</strong> e <strong>ISV</strong>. O parceiro recebe comissão, descontos ou receita recorrente.</p>
+        </div>
+
+        <div class="learn-card">
+          <div style="font-size:26px">📈</div>
+          <h3>Como estruturar um Canal de Parcerias</h3>
+          <p>Passos essenciais: <strong>1)</strong> Defina o perfil do parceiro ideal. <strong>2)</strong> Crie níveis (bronze/silver/gold). <strong>3)</strong> Estabeleça política de comissão. <strong>4)</strong> Use um PRM para gerenciar leads e comissões. <strong>5)</strong> Treine e certifique os parceiros.</p>
+          <a class="news-link" style="align-self:flex-start;margin-top:auto" onclick="window.open('https://canalizeprm.com.br/blog/como-estruturar-parcerias-e-canais-em-2026/','_blank')">🔗 Guia completo</a>
+        </div>
+
+        <div class="learn-card">
+          <div style="font-size:26px">💡</div>
+          <h3>Afiliado vs. Revenda vs. Canal</h3>
+          <p><strong>Afiliado:</strong> promove por link, sem contato com o cliente. Comissão única. <strong>Revenda:</strong> compra com desconto, vende com margem. <strong>Canal:</strong> implementa, suporta, faz pós-venda — modelo mais completo e rentável para ambos os lados.</p>
+        </div>
+
+        <div class="learn-card">
+          <div style="font-size:26px">⚙️</div>
+          <h3>O que é um PRM?</h3>
+          <p>PRM (Partner Relationship Management) organiza o ciclo do parceiro: recrutamento, onboarding, registro de deals, comissões e performance. No Brasil, destaque para a <strong>Canalize PRM</strong>. O PRM complementa o CRM: CRM gerencia clientes, PRM gerencia parceiros.</p>
+          <a class="news-link" style="align-self:flex-start;margin-top:auto" onclick="window.open('https://lp.canalizeprm.com.br/','_blank')">🔗 Ver Canalize PRM</a>
+        </div>
+
+        <div class="learn-card">
+          <div style="font-size:26px">📊</div>
+          <h3>Métricas de um Programa de Parceiros</h3>
+          <p>Acompanhe: <strong>parceiros ativos</strong> (vs. cadastrados), <strong>receita por parceiro</strong>, <strong>CAC via canal</strong> vs. venda direta, <strong>time to first deal</strong> e <strong>churn de parceiros</strong>. Mais de 40% de inativos = problema no onboarding.</p>
+        </div>
+
+        <div class="learn-card">
+          <div style="font-size:26px">🗺️</div>
+          <h3>Por que o Brasil precisa de canais?</h3>
+          <p>Com 5.570 municípios, nenhuma empresa cobre o Brasil com equipe própria. Empresas com canais estruturados crescem até <strong>3x mais rápido</strong> em regiões fora das capitais. O mercado B2B de parcerias no Brasil movimenta bilhões anualmente.</p>
+        </div>
+
+      </div>
+
+    </div><!-- /coluna principal -->
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="widget">
+        <div class="widget-title">🔥 Em Alta</div>
+        <div class="trending-item">
+          <div class="trend-num">1</div>
+          <div>
+            <div class="trend-text">PipeRun reabre canal</div>
+            <div class="trend-label">200 parceiros em 2026</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trend-num">2</div>
+          <div>
+            <div class="trend-text">Shopee + Sebrae</div>
+            <div class="trend-label">PMEs no e-commerce</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trend-num">3</div>
+          <div>
+            <div class="trend-text">Embedded Finance</div>
+            <div class="trend-label">R$ 23bi em parcerias fintech</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trend-num">4</div>
+          <div>
+            <div class="trend-text">Digibee + Vertify</div>
+            <div class="trend-label">Startup BR expande EUA</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trend-num">5</div>
+          <div>
+            <div class="trend-text">RD Station Partners</div>
+            <div class="trend-label">2.000+ agências parceiras</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="widget">
+        <div class="widget-title">📂 Categorias</div>
+        <div class="category-list">
+          <div class="category-item"><span class="cat-name">Tecnologia / SaaS</span><span class="cat-count">41</span></div>
+          <div class="category-item"><span class="cat-name">Programas de Canal</span><span class="cat-count">28</span></div>
+          <div class="category-item"><span class="cat-name">Afiliados</span><span class="cat-count">23</span></div>
+          <div class="category-item"><span class="cat-name">Varejo / E-commerce</span><span class="cat-count">19</span></div>
+          <div class="category-item"><span class="cat-name">Franquias</span><span class="cat-count">15</span></div>
+          <div class="category-item"><span class="cat-name">Fintech</span><span class="cat-count">14</span></div>
+          <div class="category-item"><span class="cat-name">Startups</span><span class="cat-count">31</span></div>
+          <div class="category-item"><span class="cat-name">Inteligência Artificial</span><span class="cat-count">18</span></div>
+        </div>
+      </div>
+
+      <div class="widget" style="background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(0,212,170,.07));border-color:rgba(108,99,255,.3)">
+        <div class="widget-title" style="color:var(--accent2)">🚀 Este Portal</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px">Será a principal referência de notícias e conteúdo sobre parcerias B2B no Brasil.</p>
+        <div style="font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:6px">
+          <div>✅ Notícias diárias de parcerias</div>
+          <div>✅ Mapeamento de programas de canal</div>
+          <div>✅ Conteúdo educativo</div>
+          <div>✅ Calculadora de comissões</div>
+          <div>✅ Diretório de parceiros</div>
+        </div>
+      </div>
+
+    </aside>
+
+  </div><!-- /layout -->
+
+</main>
+
+</body>
+</html>

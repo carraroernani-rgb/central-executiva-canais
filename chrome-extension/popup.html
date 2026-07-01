@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACOM Canais – Sync</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      width: 320px;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+
+    header {
+      background: #1d4ed8;
+      color: #fff;
+      padding: 16px 20px;
+    }
+    header h1 { font-size: 15px; font-weight: 700; letter-spacing: 0.3px; }
+    header p  { font-size: 11px; opacity: 0.75; margin-top: 2px; }
+
+    .body { padding: 16px 20px; }
+
+    #status-box {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      min-height: 48px;
+      color: #475569;
+      line-height: 1.5;
+    }
+    #status-box.success { border-color: #22c55e; color: #15803d; background: #f0fdf4; }
+    #status-box.error   { border-color: #ef4444; color: #b91c1c; background: #fef2f2; }
+    #status-box.loading { border-color: #3b82f6; color: #1d4ed8; background: #eff6ff; }
+
+    #stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .stat-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .stat-card .value { font-size: 24px; font-weight: 700; color: #1d4ed8; }
+    .stat-card .label { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+
+    button {
+      width: 100%;
+      padding: 11px;
+      background: #1d4ed8;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    button:hover:not(:disabled) { background: #1e40af; }
+    button:disabled { background: #93c5fd; cursor: not-allowed; }
+
+    .last-sync { font-size: 10px; color: #94a3b8; text-align: center; margin-top: 10px; }
+
+    footer {
+      padding: 10px 20px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 10px;
+      color: #cbd5e1;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ACOM Canais &amp; Parcerias</h1>
+    <p>Sincronização com BigQuery</p>
+  </header>
+
+  <div class="body">
+    <div id="status-box">Pronto para sincronizar. Abra a página de negócios do Atendare e clique no botão abaixo.</div>
+
+    <div id="stats">
+      <div class="stat-card">
+        <div class="value" id="stat-extraidos">–</div>
+        <div class="label">Extraídos</div>
+      </div>
+      <div class="stat-card">
+        <div class="value" id="stat-enviados">–</div>
+        <div class="label">Enviados</div>
+      </div>
+    </div>
+
+    <button id="btn-sync">Sincronizar Dados Atendare</button>
+    <div class="last-sync" id="last-sync"></div>
+  </div>
+
+  <footer>ACOM Sistemas · Mini BI Canais</footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
