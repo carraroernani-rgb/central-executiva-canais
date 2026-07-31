@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico: Seu negócio está pronto para um Programa de Parcerias? | Hub de Parcerias</title>
+<meta name="description" content="Responda 12 perguntas e descubra o nível de maturidade do seu programa de canais e parcerias — com recomendações práticas do Hub de Parcerias.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0B0B12;
+    --surface:#15151F;
+    --surface2:#1F1F2E;
+    --purple:#8B5CF6;
+    --purple-deep:#4C1D95;
+    --green:#2EE6A6;
+    --white:#F4F1FA;
+    --muted:#8783A0;
+    --border:#26243A;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--black);
+    color:var(--white);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    line-height:1.5;
+  }
+  .bg-glow{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(circle at 15% 0%, rgba(139,92,246,0.16) 0%, transparent 45%),
+      radial-gradient(circle at 100% 30%, rgba(46,230,166,0.08) 0%, transparent 40%);
+  }
+  .shell{ position:relative; z-index:1; max-width:760px; margin:0 auto; padding:2.5rem 1.25rem 5rem; }
+
+  header.top{ display:flex; align-items:center; gap:10px; margin-bottom:2.5rem; }
+  .node{ width:12px; height:12px; border-radius:50%; background:var(--purple); box-shadow:0 0 12px var(--purple); }
+  .top span{ font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+  .top strong{ color:var(--white); font-weight:700; }
+
+  .eyebrow{
+    font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--green); margin-bottom:.9rem; display:flex; align-items:center; gap:8px;
+  }
+  h1{
+    font-family:'Unbounded',sans-serif; font-weight:800; font-size:clamp(28px,5vw,42px);
+    line-height:1.12; margin-bottom:1rem; letter-spacing:-.01em;
+  }
+  h1 em{ font-style:normal; color:var(--purple); }
+  .lede{ color:var(--muted); font-size:16px; max-width:56ch; margin-bottom:2rem; }
+
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:16px;
+    padding:1.75rem; margin-bottom:1.25rem;
+  }
+
+  /* progress */
+  .progress-wrap{ margin-bottom:2rem; }
+  .progress-bar{ height:6px; background:var(--surface2); border-radius:99px; overflow:hidden; }
+  .progress-fill{ height:100%; background:linear-gradient(90deg,var(--purple),var(--green)); width:0%; transition:width .35s ease; }
+  .progress-label{ font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); margin-top:8px; text-transform:uppercase; letter-spacing:.08em; }
+
+  .q-cat{
+    font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--purple); margin-bottom:.6rem;
+  }
+  .q-text{ font-family:'Unbounded',sans-serif; font-weight:600; font-size:20px; line-height:1.3; margin-bottom:1.4rem; }
+
+  .options{ display:flex; flex-direction:column; gap:.6rem; }
+  .opt{
+    display:flex; align-items:center; gap:12px;
+    background:var(--black); border:1px solid var(--border); border-radius:12px;
+    padding:.9rem 1.1rem; cursor:pointer; transition:all .15s ease; text-align:left;
+    font-family:'Inter',sans-serif; font-size:15px; color:var(--white); width:100%;
+  }
+  .opt:hover{ border-color:var(--purple); background:rgba(139,92,246,0.06); }
+  .opt .dot{
+    width:18px; height:18px; border-radius:50%; border:2px solid var(--muted); flex:none;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .opt.selected{ border-color:var(--purple); background:rgba(139,92,246,0.12); }
+  .opt.selected .dot{ border-color:var(--purple); background:var(--purple); }
+  .opt.selected .dot::after{ content:''; width:7px; height:7px; border-radius:50%; background:var(--black); }
+
+  .nav-row{ display:flex; justify-content:space-between; align-items:center; margin-top:1.75rem; gap:1rem; }
+  .btn{
+    font-family:'Space Mono',monospace; font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:.06em;
+    border-radius:99px; padding:.85rem 1.6rem; border:none; cursor:pointer; transition:all .15s ease;
+  }
+  .btn-primary{ background:var(--purple); color:#fff; }
+  .btn-primary:hover{ background:#7c4ded; }
+  .btn-primary:disabled{ background:var(--surface2); color:var(--muted); cursor:not-allowed; }
+  .btn-ghost{ background:transparent; color:var(--muted); border:1px solid var(--border); }
+  .btn-ghost:hover{ color:var(--white); border-color:var(--muted); }
+
+  .hidden{ display:none !important; }
+
+  /* intro */
+  .intro-list{ list-style:none; margin:1.5rem 0 2rem; display:flex; flex-direction:column; gap:.6rem; }
+  .intro-list li{ display:flex; gap:10px; color:var(--muted); font-size:14.5px; align-items:flex-start; }
+  .intro-list li::before{ content:'—'; color:var(--green); flex:none; }
+  .meta-row{ display:flex; gap:1.5rem; margin-bottom:2rem; font-family:'Space Mono',monospace; font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+  .meta-row b{ color:var(--white); }
+
+  /* result */
+  .result-tag{
+    display:inline-block; font-family:'Space Mono',monospace; font-size:12px; text-transform:uppercase;
+    letter-spacing:.1em; padding:.4rem .9rem; border-radius:99px; margin-bottom:1rem;
+    border:1px solid var(--border);
+  }
+  .score-row{ display:flex; align-items:baseline; gap:.75rem; margin-bottom:.5rem; }
+  .score-num{ font-family:'Unbounded',sans-serif; font-size:56px; font-weight:800; color:var(--green); }
+  .score-den{ font-family:'Space Mono',monospace; color:var(--muted); font-size:16px; }
+  .result-title{ font-family:'Unbounded',sans-serif; font-weight:700; font-size:26px; margin-bottom:.85rem; line-height:1.25; }
+  .result-desc{ color:var(--muted); margin-bottom:1.5rem; font-size:15px; }
+
+  .breakdown{ display:grid; gap:.6rem; margin-bottom:1.75rem; }
+  .b-row{ display:flex; align-items:center; gap:12px; }
+  .b-label{ font-size:13px; color:var(--muted); width:150px; flex:none; }
+  .b-track{ flex:1; height:8px; background:var(--surface2); border-radius:99px; overflow:hidden; }
+  .b-fill{ height:100%; background:linear-gradient(90deg,var(--purple),var(--green)); border-radius:99px; }
+  .b-val{ font-family:'Space Mono',monospace; font-size:12px; color:var(--white); width:34px; text-align:right; flex:none; }
+
+  .reco-title{ font-family:'Space Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--purple); margin:1.5rem 0 .8rem; }
+  .reco-list{ list-style:none; display:flex; flex-direction:column; gap:.7rem; margin-bottom:2rem; }
+  .reco-list li{ display:flex; gap:10px; font-size:14.5px; color:var(--white); }
+  .reco-list li::before{ content:'0' counter(r) '.'; }
+  .reco-list{ counter-reset:r; }
+  .reco-list li{ counter-increment:r; }
+  .reco-list li::before{ content:counter(r,decimal-leading-zero); font-family:'Space Mono',monospace; color:var(--green); flex:none; }
+
+  .cta-card{
+    background:linear-gradient(135deg, rgba(139,92,246,0.18), rgba(46,230,166,0.06));
+    border:1px solid var(--purple); border-radius:16px; padding:1.6rem;
+  }
+  .cta-card h3{ font-family:'Unbounded',sans-serif; font-size:18px; margin-bottom:.5rem; }
+  .cta-card p{ color:var(--muted); font-size:14px; margin-bottom:1.1rem; }
+  .cta-row{ display:flex; gap:.7rem; flex-wrap:wrap; }
+  .btn-link{
+    font-family:'Space Mono',monospace; font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:.05em;
+    text-decoration:none; padding:.85rem 1.5rem; border-radius:99px; display:inline-block;
+  }
+  .btn-link.primary{ background:var(--green); color:#0B0B12; }
+  .btn-link.primary:hover{ background:#22c493; }
+  .btn-link.secondary{ background:transparent; border:1px solid var(--border); color:var(--white); }
+
+  footer{ text-align:center; margin-top:3rem; color:var(--muted); font-family:'Space Mono',monospace; font-size:12px; }
+  footer a{ color:var(--purple); text-decoration:none; }
+
+  @media (max-width:520px){
+    .card{ padding:1.25rem; }
+    .q-text{ font-size:18px; }
+    .b-label{ width:110px; font-size:12px; }
+  }
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="shell">
+
+  <header class="top">
+    <span class="node"></span>
+    <span><strong>HUB DE PARCERIAS</strong> · diagnóstico</span>
+  </header>
+
+  <!-- INTRO -->
+  <section id="screen-intro">
+    <div class="eyebrow">● diagnóstico gratuito</div>
+    <h1>Seu negócio está pronto para um <em>programa de parcerias</em>?</h1>
+    <p class="lede">12 perguntas diretas sobre como você lida hoje com indicações, canais e parceiros de negócio. No fim, você recebe um raio-x do seu nível de maturidade e o que fazer primeiro.</p>
+
+    <ul class="intro-list">
+      <li>Leva cerca de 3 minutos para responder</li>
+      <li>Sem cadastro — o resultado aparece na hora</li>
+      <li>Recomendações práticas, sem "consultorês"</li>
+    </ul>
+
+    <div class="card">
+      <div class="meta-row"><span><b>12</b> perguntas</span><span><b>4</b> eixos avaliados</span><span><b>~3</b> min</span></div>
+      <button class="btn btn-primary" style="width:100%;padding:1rem;" onclick="startQuiz()">Começar diagnóstico →</button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="screen-quiz" class="hidden">
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">Pergunta 1 de 12</div>
+    </div>
+
+    <div class="card">
+      <div class="q-cat" id="qCat">Estrutura</div>
+      <div class="q-text" id="qText">...</div>
+      <div class="options" id="qOptions"></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-ghost" id="btnBack" onclick="prevQuestion()">← Voltar</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQuestion()" disabled>Próxima →</button>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="screen-result" class="hidden">
+    <div class="result-tag" id="resultTag">Nível</div>
+    <div class="score-row">
+      <span class="score-num" id="scoreNum">0</span>
+      <span class="score-den">/ 100</span>
+    </div>
+    <h2 class="result-title" id="resultTitle">...</h2>
+    <p class="result-desc" id="resultDesc">...</p>
+
+    <div class="card">
+      <div class="reco-title" style="margin-top:0;">Como você pontuou por eixo</div>
+      <div class="breakdown" id="breakdown"></div>
+    </div>
+
+    <div class="reco-title">Seus 3 próximos passos</div>
+    <ul class="reco-list" id="recoList"></ul>
+
+    <div class="cta-card">
+      <h3>Quer montar isso com estrutura?</h3>
+      <p>O Hub de Parcerias publica conteúdo semanal sobre como montar, controlar e escalar programas de canais e parcerias no Brasil — direto de quem já fez isso na prática.</p>
+      <div class="cta-row">
+        <a class="btn-link primary" href="https://hubdeparcerias.com.br" target="_blank" rel="noopener">Conhecer o Hub de Parcerias</a>
+        <a class="btn-link secondary" href="#" onclick="restart();return false;">Refazer diagnóstico</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Um diagnóstico do <a href="https://hubdeparcerias.com.br" target="_blank" rel="noopener">Hub de Parcerias</a> — o que move canais, alianças e ecossistemas no Brasil.
+  </footer>
+</div>
+
+<script>
+// Each question: category, text, options[{label, score 0-3}]
+const QUESTIONS = [
+  { cat: 'Estrutura comercial', text: 'Hoje, sua empresa tem uma equipe comercial dedicada (vendas diretas)?', options: [
+    { label: 'Não, quem vende é o(a) fundador(a) ou faz tudo', score: 0 },
+    { label: 'Sim, mas é uma pessoa só ou algo informal', score: 1 },
+    { label: 'Sim, temos um time comercial estruturado', score: 3 },
+  ]},
+  { cat: 'Estrutura comercial', text: 'Dentro da equipe comercial, existe alguém responsável só por parcerias/canais (mesmo que em part-time)?', options: [
+    { label: 'Não, ninguém cuida disso especificamente', score: 0 },
+    { label: 'Alguém cuida disso nas horas vagas', score: 1 },
+    { label: 'Sim, tem responsável dedicado ou vamos contratar em breve', score: 3 },
+  ]},
+  { cat: 'Indicações e origem', text: 'Você já recebe indicações de oportunidades de negócio vindas de parceiros hoje?', options: [
+    { label: 'Não, nunca recebemos', score: 0 },
+    { label: 'Às vezes, de forma esporádica e informal', score: 1 },
+    { label: 'Sim, recebemos com alguma regularidade', score: 3 },
+  ]},
+  { cat: 'Indicações e origem', text: 'Você sabe dizer, com razoável precisão, quantas oportunidades de negócio recebeu de parceiros no último ano?', options: [
+    { label: 'Não faço ideia', score: 0 },
+    { label: 'Tenho uma estimativa de cabeça, não está registrado', score: 1 },
+    { label: 'Sim, tenho o número registrado em algum lugar', score: 3 },
+  ]},
+  { cat: 'Indicações e origem', text: 'Você sabe dizer de quais parceiros (nominalmente) vieram essas indicações?', options: [
+    { label: 'Não sei identificar a origem', score: 0 },
+    { label: 'Sei de forma aproximada, sem registro formal', score: 1 },
+    { label: 'Sim, sei exatamente quem indicou o quê', score: 3 },
+  ]},
+  { cat: 'Indicações e origem', text: 'Dessas indicações recebidas, você sabe quantas viraram clientes de fato?', options: [
+    { label: 'Não sei medir isso', score: 0 },
+    { label: 'Tenho uma noção geral, sem dado exato', score: 1 },
+    { label: 'Sim, acompanho a taxa de conversão', score: 3 },
+  ]},
+  { cat: 'Gestão e ferramentas', text: 'Existe algum lugar (CRM, planilha, sistema) onde você registra parceiros e o que cada um trouxe de negócio?', options: [
+    { label: 'Não existe nenhum controle', score: 0 },
+    { label: 'Existe uma planilha simples, pouco atualizada', score: 1 },
+    { label: 'Sim, temos um processo/ferramenta atualizada', score: 3 },
+  ]},
+  { cat: 'Gestão e ferramentas', text: 'Existe algum tipo de reconhecimento ou pagamento (comissão, revenue share, bônus) para quem indica negócios?', options: [
+    { label: 'Não, nunca pensamos nisso', score: 0 },
+    { label: 'Fazemos algo informal, caso a caso', score: 1 },
+    { label: 'Sim, temos uma política clara e formalizada', score: 3 },
+  ]},
+  { cat: 'Estratégia', text: 'Você já definiu qual TIPO de parceiro faz sentido para o seu negócio (revenda, indicação, tecnologia, etc.)?', options: [
+    { label: 'Não, aceitamos qualquer parceria que aparece', score: 0 },
+    { label: 'Temos uma ideia, mas não está formalizado', score: 1 },
+    { label: 'Sim, temos critérios claros de perfil ideal de parceiro', score: 3 },
+  ]},
+  { cat: 'Estratégia', text: 'Existe um processo definido de como um parceiro entra, é ativado e começa a gerar negócio (onboarding)?', options: [
+    { label: 'Não existe processo, cada caso é um caso', score: 0 },
+    { label: 'Existe algo básico, não documentado', score: 1 },
+    { label: 'Sim, temos um processo estruturado e repetível', score: 3 },
+  ]},
+  { cat: 'Estratégia', text: 'Sua liderança (fundadores/diretoria) enxerga parcerias como uma frente estratégica de crescimento — com meta e orçamento?', options: [
+    { label: 'Não, é visto como algo secundário', score: 0 },
+    { label: 'Existe interesse, mas sem meta ou orçamento formal', score: 1 },
+    { label: 'Sim, é prioridade com meta e recurso dedicado', score: 3 },
+  ]},
+  { cat: 'Estratégia', text: 'Se você tivesse que montar um programa de parcerias estruturado hoje, você saberia por onde começar?', options: [
+    { label: 'Não, não tenho ideia de como estruturar isso', score: 0 },
+    { label: 'Tenho uma ideia geral, mas não um plano', score: 1 },
+    { label: 'Sim, já tenho um plano ou já estamos executando', score: 3 },
+  ]},
+];
+
+const AXES = ['Estrutura comercial','Indicações e origem','Gestão e ferramentas','Estratégia'];
+
+let current = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+
+function startQuiz(){
+  document.getElementById('screen-intro').classList.add('hidden');
+  document.getElementById('screen-quiz').classList.remove('hidden');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  document.getElementById('qCat').textContent = q.cat;
+  document.getElementById('qText').textContent = q.text;
+  document.getElementById('progressLabel').textContent = `Pergunta ${current+1} de ${QUESTIONS.length}`;
+  document.getElementById('progressFill').style.width = `${(current/QUESTIONS.length)*100}%`;
+
+  const wrap = document.getElementById('qOptions');
+  wrap.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt' + (answers[current] === i ? ' selected' : '');
+    btn.innerHTML = `<span class="dot"></span><span>${opt.label}</span>`;
+    btn.onclick = () => selectOption(i);
+    wrap.appendChild(btn);
+  });
+
+  document.getElementById('btnBack').style.visibility = current === 0 ? 'hidden' : 'visible';
+  document.getElementById('btnNext').disabled = answers[current] === null;
+  document.getElementById('btnNext').textContent = current === QUESTIONS.length - 1 ? 'Ver resultado →' : 'Próxima →';
+}
+
+function selectOption(i){
+  answers[current] = i;
+  renderQuestion();
+}
+
+function nextQuestion(){
+  if (answers[current] === null) return;
+  if (current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function prevQuestion(){
+  if (current > 0){
+    current--;
+    renderQuestion();
+  }
+}
+
+function showResult(){
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('screen-result').classList.remove('hidden');
+
+  const axisScores = {};
+  const axisMax = {};
+  AXES.forEach(a => { axisScores[a] = 0; axisMax[a] = 0; });
+
+  let total = 0, max = 0;
+  QUESTIONS.forEach((q, i) => {
+    const score = q.options[answers[i]].score;
+    total += score;
+    max += 3;
+    axisScores[q.cat] += score;
+    axisMax[q.cat] += 3;
+  });
+
+  const pct = Math.round((total / max) * 100);
+  document.getElementById('scoreNum').textContent = pct;
+
+  const breakdown = document.getElementById('breakdown');
+  breakdown.innerHTML = '';
+  AXES.forEach(a => {
+    const axisPct = Math.round((axisScores[a] / axisMax[a]) * 100);
+    const row = document.createElement('div');
+    row.className = 'b-row';
+    row.innerHTML = `<span class="b-label">${a}</span><span class="b-track"><span class="b-fill" style="width:${axisPct}%"></span></span><span class="b-val">${axisPct}%</span>`;
+    breakdown.appendChild(row);
+  });
+
+  let level, title, desc, tagColor, recos;
+  if (pct < 25){
+    level = 'Nível 1 — Informal';
+    tagColor = 'var(--muted)';
+    title = 'Você ainda não tem um programa de parcerias — tem coincidências.';
+    desc = 'As indicações que chegam são acaso, não estratégia. Isso não é um problema de falta de oportunidade: é falta de estrutura para captar e repetir o que já funciona.';
+    recos = [
+      'Mapeie, nos últimos 12 meses, todo negócio que veio de indicação — mesmo que de memória. Esse é seu ponto de partida.',
+      'Defina 1 perfil de parceiro ideal (quem já atende o seu cliente, sem competir com você).',
+      'Crie uma planilha simples para registrar toda indicação a partir de hoje — nome do parceiro, oportunidade, status.',
+    ];
+  } else if (pct < 50){
+    level = 'Nível 2 — Emergente';
+    tagColor = 'var(--purple)';
+    title = 'O programa está nascendo, mas ainda depende de esforço individual.';
+    desc = 'Já existe alguma prática de parcerias, mas sem dono, sem processo replicável e sem visibilidade de resultado. É o momento de sair do improviso antes que a coisa cresça de forma desorganizada.';
+    recos = [
+      'Nomeie um responsável (mesmo que part-time) pela frente de parcerias.',
+      'Formalize um processo simples de onboarding: como um parceiro começa a indicar negócio para você.',
+      'Defina uma forma de reconhecimento (comissão, revenue share ou não-financeiro) para quem indica.',
+    ];
+  } else if (pct < 75){
+    level = 'Nível 3 — Estruturado';
+    tagColor = 'var(--green)';
+    title = 'Você tem as bases de um programa de parcerias real.';
+    desc = 'Existe processo, existe dado, existe alguma estratégia. Agora o desafio muda de "criar" para "escalar e ativar" — o gargalo tende a estar em quantos parceiros vendem de fato, não em quantos você recrutou.';
+    recos = [
+      'Meça a taxa de ativação: quantos parceiros cadastrados de fato geraram negócio no último trimestre.',
+      'Crie uma cadência de relacionamento com parceiros-chave (não deixe a parceria "esfriar").',
+      'Defina metas e orçamento formal para a frente de parcerias junto à liderança.',
+    ];
+  } else {
+    level = 'Nível 4 — Maduro';
+    tagColor = 'var(--green)';
+    title = 'Parcerias já são motor de crescimento, não só uma frente lateral.';
+    desc = 'Você tem estrutura, dado e estratégia. O próximo salto é sofisticação: segmentar parceiros por potencial, investir em co-marketing e tratar o ecossistema como uma extensão do seu time comercial.';
+    recos = [
+      'Segmente parceiros por potencial de receita e trate os top performers com um plano dedicado.',
+      'Invista em habilitação (enablement): treinamento, materiais e cadência de comunicação para o ecossistema.',
+      'Compartilhe métricas de parceria com a liderança como parte do relatório de crescimento, não à parte dele.',
+    ];
+  }
+
+  const tagEl = document.getElementById('resultTag');
+  tagEl.textContent = level;
+  tagEl.style.color = tagColor;
+  tagEl.style.borderColor = tagColor;
+
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultDesc').textContent = desc;
+
+  const recoList = document.getElementById('recoList');
+  recoList.innerHTML = '';
+  recos.forEach(r => {
+    const li = document.createElement('li');
+    li.textContent = r;
+    recoList.appendChild(li);
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart(){
+  current = 0;
+  answers = new Array(QUESTIONS.length).fill(null);
+  document.getElementById('screen-result').classList.add('hidden');
+  document.getElementById('screen-intro').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
